@@ -97,6 +97,7 @@
 		045988982629790600B1E606 /* ArtistLikeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045988972629790600B1E606 /* ArtistLikeVC.swift */; };
 		047846E9261881EA00B22A29 /* ArtistSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047846E8261881EA00B22A29 /* ArtistSearchVC.swift */; };
 		047846EE2618823900B22A29 /* SearchArtistTblCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047846ED2618823900B22A29 /* SearchArtistTblCell.swift */; };
+		047CBECD26B91B6500985430 /* NewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047CBECC26B91B6500985430 /* NewViewController.swift */; };
 		048AE7C22609B18700552007 /* QRCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048AE7C12609B18700552007 /* QRCodeVC.swift */; };
 		048AE7C72609B24100552007 /* InviteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048AE7C62609B24100552007 /* InviteVC.swift */; };
 		048AE7CC2609B25800552007 /* InviteTblCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048AE7CB2609B25800552007 /* InviteTblCell.swift */; };
@@ -258,6 +259,7 @@
 		046A31812696E4D2008088CA /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
 		047846E8261881EA00B22A29 /* ArtistSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchVC.swift; sourceTree = "<group>"; };
 		047846ED2618823900B22A29 /* SearchArtistTblCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchArtistTblCell.swift; sourceTree = "<group>"; };
+		047CBECC26B91B6500985430 /* NewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewViewController.swift; sourceTree = "<group>"; };
 		048AE7C12609B18700552007 /* QRCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeVC.swift; sourceTree = "<group>"; };
 		048AE7C62609B24100552007 /* InviteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteVC.swift; sourceTree = "<group>"; };
 		048AE7CB2609B25800552007 /* InviteTblCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteTblCell.swift; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 				043A66D92689F76B0058513E /* AddProviderVC.swift */,
 				04932C42268C61DB00B53F82 /* OtherUserEmailTableViewCell.swift */,
 				04F9FB39268C8DC200339F32 /* FriendOnEvent.swift */,
+				047CBECC26B91B6500985430 /* NewViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -980,6 +983,7 @@
 				040C8A3E260211EE00671ACF /* CategoryVC.swift in Sources */,
 				0411F9F026270C3900030164 /* VendorReviewsVC.swift in Sources */,
 				04D309862633FD3C002DD0D7 /* PlayerView.swift in Sources */,
+				047CBECD26B91B6500985430 /* NewViewController.swift in Sources */,
 				04D309A726340269002DD0D7 /* OpalImagePickerCollectionViewLayout.swift in Sources */,
 				040C89FB2601E2B800671ACF /* LoginVC.swift in Sources */,
 				04D309772633FB6B002DD0D7 /* SinglePhotoRightSideTableViewCell.swift in Sources */,
