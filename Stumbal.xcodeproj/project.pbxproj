@@ -1198,7 +1198,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.offside.stumbal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/kaushiksaksena/Documents/Stumbal_iOS_Release1/Stumbal/Stumbal/Controllers/Stumbal-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/mac/Documents/Ankush/Stumbal/Stumbal/Controllers/Stumbal-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1230,7 +1230,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.offside.stumbal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/kaushiksaksena/Documents/Stumbal_iOS_Release1/Stumbal/Stumbal/Controllers/Stumbal-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/mac/Documents/Ankush/Stumbal/Stumbal/Controllers/Stumbal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
