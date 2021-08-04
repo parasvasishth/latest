@@ -170,20 +170,24 @@ class InviteVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
         return jsonObject.map { $0 as! [String: Any] }
     }
     
+    var arr:[Any] = [Any]()
     
     //MARK: match_contact ;
         func match_contact()
         {
             // UserDefaults.standard.set(self.userId, forKey: "User id")
-            hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-            hud.mode = MBProgressHUDMode.indeterminate
-            hud.self.bezelView.color = UIColor.black
-            hud.label.text = "Loading...."
+            DispatchQueue.main.async(execute: {
+                self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                self.hud.mode = MBProgressHUDMode.indeterminate
+                self.hud.self.bezelView.color = UIColor.black
+                self.hud.label.text = "Loading...."
+            })
+           
             let uID = UserDefaults.standard.value(forKey: "u_Id") as! String
             
             print("123",uID)
             
-            Alamofire.request("https://stumbal.com/process.php?action=match_contact", method: .post, parameters: ["contacts" :final], encoding:  URLEncoding.httpBody).responseJSON { response in
+            Alamofire.request("https://stumbal.com/process.php?action=match_contact", method: .post, parameters: ["contacts" :final], encoding:  URLEncoding.httpBody).responseJSON { [self] response in
                 if let data = response.data {
                     let json = String(data: data, encoding: String.Encoding.utf8)
                     print("=====1======")
@@ -245,6 +249,15 @@ class InviteVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
                             
                             if self.finalArr.count != 0
                             {
+                                let nameDiscriptor = NSSortDescriptor(key: "name", ascending: true, selector: Selector("caseInsensitiveCompare:"))
+
+                                arr = (finalArr as NSMutableArray).sortedArray(using: [nameDiscriptor])
+                                print("111",arr)
+                                let t:NSArray = arr as! NSArray
+                                finalArr = NSMutableArray(array: t)
+
+                            print("4444",finalArr)
+                                
                                 self.inviteTblView.reloadData()
                                 self.inviteTblView.isHidden = false
                             }
@@ -277,6 +290,21 @@ class InviteVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
                             
                             if self.finalArr.count != 0
                             {
+                               
+//                                self.arr1 = self.arr1.sorted(by: { (Obj1, Obj2) -> Bool in
+//                                    let Obj1_Name = (Obj1 as AnyObject).name ?? ""
+//                                    let Obj2_Name = (Obj2 as AnyObject).name ?? ""
+//                                      return (Obj1_Name.localizedCaseInsensitiveCompare(Obj2_Name) == .orderedAscending)
+//                                }) as NSArray
+
+                                let nameDiscriptor = NSSortDescriptor(key: "name", ascending: true, selector: Selector("caseInsensitiveCompare:"))
+
+                                arr = (finalArr as NSMutableArray).sortedArray(using: [nameDiscriptor])
+                                print("111",arr)
+                                let t:NSArray = arr as! NSArray
+                                finalArr = NSMutableArray(array: t)
+
+                            print("4444",finalArr)
                                 self.inviteTblView.reloadData()
                                 self.inviteTblView.isHidden = false
                             }
@@ -403,7 +431,7 @@ class InviteVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     @IBAction func invite(_ sender: UIButton) {
     //    let url = UserDefaults.standard.value(forKey: "https://testflight.apple.com/join/q9X0UBCo")
         
-        if let name = URL(string: "https://testflight.apple.com/join/q9X0UBCo"), !name.absoluteString.isEmpty {
+        if let name = URL(string: "https://apps.apple.com/us/app/stumbal/id1566360669"), !name.absoluteString.isEmpty {
           let objectsToShare = [name]
           let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
           self.present(activityVC, animated: true, completion: nil)

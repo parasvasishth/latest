@@ -547,15 +547,15 @@ func getdetail() {
 }
 
 @IBAction func apple(_ sender: UIButton) {
-//    let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
-//    alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
-//    self.present(alert, animated: false, completion: nil)
-//
+    let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
+    alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
+    self.present(alert, animated: false, completion: nil)
+
         UserDefaults.standard.set(true, forKey: "applelogin")
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
-    
+
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
