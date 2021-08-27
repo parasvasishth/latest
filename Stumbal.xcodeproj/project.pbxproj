@@ -94,6 +94,8 @@
 		04407E99260490D400AD15DB /* ChatListTblCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04407E98260490D400AD15DB /* ChatListTblCell.swift */; };
 		04418E322660B86B005B20E3 /* credentials.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04418E312660B86A005B20E3 /* credentials.plist */; };
 		044AD8F3265E2682004EDC18 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044AD8F2265E2682004EDC18 /* SettingsVC.swift */; };
+		0452B84B26D369C40035ED90 /* Gilroy-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0452B84726D369C40035ED90 /* Gilroy-ExtraBold.otf */; };
+		0452B85B26D373370035ED90 /* EventDetailCollCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0452B85A26D373370035ED90 /* EventDetailCollCell.swift */; };
 		045988982629790600B1E606 /* ArtistLikeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045988972629790600B1E606 /* ArtistLikeVC.swift */; };
 		047846E9261881EA00B22A29 /* ArtistSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047846E8261881EA00B22A29 /* ArtistSearchVC.swift */; };
 		047846EE2618823900B22A29 /* SearchArtistTblCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047846ED2618823900B22A29 /* SearchArtistTblCell.swift */; };
@@ -255,6 +257,8 @@
 		04407E98260490D400AD15DB /* ChatListTblCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTblCell.swift; sourceTree = "<group>"; };
 		04418E312660B86A005B20E3 /* credentials.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = credentials.plist; sourceTree = "<group>"; };
 		044AD8F2265E2682004EDC18 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		0452B84726D369C40035ED90 /* Gilroy-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-ExtraBold.otf"; sourceTree = "<group>"; };
+		0452B85A26D373370035ED90 /* EventDetailCollCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailCollCell.swift; sourceTree = "<group>"; };
 		045988972629790600B1E606 /* ArtistLikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistLikeVC.swift; sourceTree = "<group>"; };
 		046A31812696E4D2008088CA /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
 		047846E8261881EA00B22A29 /* ArtistSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchVC.swift; sourceTree = "<group>"; };
@@ -501,6 +505,7 @@
 				04932C42268C61DB00B53F82 /* OtherUserEmailTableViewCell.swift */,
 				04F9FB39268C8DC200339F32 /* FriendOnEvent.swift */,
 				047CBECC26B91B6500985430 /* NewViewController.swift */,
+				0452B85A26D373370035ED90 /* EventDetailCollCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -523,6 +528,7 @@
 				04124B90264FCA6700AF5C83 /* Poppins-Medium.ttf */,
 				04124B86264FCA6400AF5C83 /* Poppins-Regular.ttf */,
 				04124B92264FCA6800AF5C83 /* Poppins-SemiBold.ttf */,
+				0452B84726D369C40035ED90 /* Gilroy-ExtraBold.otf */,
 			);
 			path = Fonds;
 			sourceTree = "<group>";
@@ -722,6 +728,7 @@
 				041B221026737DA5006749FB /* LeftViewCell.xib in Resources */,
 				041D37C6266250180016ACEC /* GoogleService-Info.plist in Resources */,
 				040C89CD2601DC0000671ACF /* LaunchScreen.storyboard in Resources */,
+				0452B84B26D369C40035ED90 /* Gilroy-ExtraBold.otf in Resources */,
 				04D309AE26340269002DD0D7 /* ResourceBundle-OpalImagePickerResources-OpalImagePicker-Info.plist in Resources */,
 				040C89CA2601DC0000671ACF /* Assets.xcassets in Resources */,
 				04418E322660B86B005B20E3 /* credentials.plist in Resources */,
@@ -912,6 +919,7 @@
 				04D3099F26340269002DD0D7 /* OpalImagePickerRootViewController.swift in Sources */,
 				043BF2AA2632D081002EB70C /* CardListVC.swift in Sources */,
 				040268EF2609EF7B0008F22E /* ProposalVC.swift in Sources */,
+				0452B85B26D373370035ED90 /* EventDetailCollCell.swift in Sources */,
 				041B221126737DA5006749FB /* RightViewCell.swift in Sources */,
 				04D309A626340269002DD0D7 /* TimeInterval+String.swift in Sources */,
 				04057C17260B25BE00F0E195 /* ArtistUserProfileVC.swift in Sources */,
@@ -1182,9 +1190,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Stumbal/Stumbal.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7JANFG463R;
 				ENABLE_TESTABILITY = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1194,10 +1202,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.offside.stumbal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = StumbalLive_25Aug;
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/mac/Documents/Ankush/Stumbal/Stumbal/Controllers/Stumbal-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1213,9 +1221,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Stumbal/Stumbal.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7JANFG463R;
 				ENABLE_TESTABILITY = NO;
 				EXCLUDED_ARCHS = "";
@@ -1226,10 +1234,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.offside.stumbal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = StumbalLive_25Aug;
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/mac/Documents/Ankush/Stumbal/Stumbal/Controllers/Stumbal-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

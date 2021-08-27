@@ -15,8 +15,8 @@ class SettingsVC: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate,U
     var dist  = Int()
 var minprice  = Int()
 var maxprice  = Int()
-    var myPicker2Data1 = [String]()
-    let thePicker = UIPickerView()
+var myPicker2Data1 = [String]()
+let thePicker = UIPickerView()
 
 var hud = MBProgressHUD()
 var distance:String = ""

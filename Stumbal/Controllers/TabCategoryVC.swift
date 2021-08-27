@@ -25,7 +25,7 @@ override func viewDidLoad() {
     categoryCollView.delegate = self
     fetch_metatags()
     let layout = UICollectionViewCenterLayout()
-    layout.estimatedItemSize = CGSize(width: 140, height: 40)
+    layout.estimatedItemSize = CGSize(width: 140, height: 100)
     categoryCollView.collectionViewLayout = layout
 }
 

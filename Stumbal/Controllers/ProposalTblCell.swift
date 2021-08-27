@@ -15,6 +15,8 @@ class ProposalTblCell: UITableViewCell {
     @IBOutlet var timelbl: UILabel!
     @IBOutlet var priceLbl: UILabel!
     @IBOutlet var deleteobj: UIButton!
+    @IBOutlet var dotImg: UIImageView!
+    @IBOutlet var timeImg: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

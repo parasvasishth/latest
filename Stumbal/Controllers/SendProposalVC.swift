@@ -30,12 +30,10 @@ var vendor_ID:String = ""
 var myPicker2Data2 = [String]()
 let imagePickerController = UIImagePickerController()
 var videoURL: URL?
+    var datefinal:String = ""
 
 override func viewDidLoad() {
     super.viewDidLoad()
-    
-    
- 
     
     UserDefaults.standard.removeObject(forKey: "vname")
     UserDefaults.standard.removeObject(forKey: "vid")
@@ -49,7 +47,7 @@ override func viewDidLoad() {
     providerFiled.attributedPlaceholder =
         NSAttributedString(string: "Select Service Provider", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     proposalPriceFiled.attributedPlaceholder =
-        NSAttributedString(string: "Proposed Price", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+        NSAttributedString(string: "Ticket Price", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     dateFiled.attributedPlaceholder =
         NSAttributedString(string: "Proposed Date", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
     timeFiled.attributedPlaceholder =
@@ -96,34 +94,48 @@ override func viewDidLoad() {
 
 @IBAction func send(_ sender: UIButton) {
     
-    if providerFiled.text != "" && proposalTxtView.text != "" && proposalPriceFiled.text != "" && dateFiled.text != "" && timeFiled.text != ""
+    if providerFiled.text != ""
     {
-        if videoURL != nil
+        if proposalTxtView.text != "Add Details of Post"
         {
-            let fs:Int = Int(fileSize(forURL: videoURL!))
-            if fs < 20
+            if videoURL != nil
             {
-                uploadWithAlamofire()
+                let fs:Int = Int(fileSize(forURL: videoURL!))
+                if fs < 20
+                {
+                    uploadWithAlamofire()
+                }
+                else
+                {
+                    let alert = UIAlertController(title: "", message: "Upload video size must be below 20 mb", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: false, completion: nil)
+                }
+                
             }
             else
             {
-                let alert = UIAlertController(title: "", message: "Upload video size must be below 20 mb", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: false, completion: nil)
+               // send_proposal()
+    //            let alert = UIAlertController(title: "", message: "Upload Video", preferredStyle: UIAlertController.Style.alert)
+    //            alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
+    //            self.present(alert, animated: false, completion: nil)
+                send_proposal()
+                
             }
-            
         }
         else
         {
-           // send_proposal()
-            let alert = UIAlertController(title: "", message: "Upload Video", preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(title: "", message: "Enter Description", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: false, completion: nil)
+            
         }
+        
+
     }
     else
     {
-        let alert = UIAlertController(title: "", message: "Fill All Field", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "", message: "Select Provider", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: false, completion: nil)
     }
@@ -249,16 +261,30 @@ func send_proposal()
     
     print("144",UserDefaults.standard.value(forKey: "u_Id") as! String,vendor_ID,providerFiled.text!,proposalTxtView.text!,proposalPriceFiled.text!,dateFiled.text!,timeFiled.text!)
     
-    // artist_id
-    let inputFormatter = DateFormatter()
-    inputFormatter.dateFormat = "dd/MM/yyyy"
-    let showDate = inputFormatter.date(from: dateFiled.text!)
-    inputFormatter.dateFormat = "yyyy-MM-dd"
-    let resultString = inputFormatter.string(from: showDate!)
-    print(resultString)
+//    let inputFormatter = DateFormatter()
+//    inputFormatter.dateFormat = "dd/MM/yyyy"
+//    let showDate = inputFormatter.date(from: dateFiled.text!)
+//    inputFormatter.dateFormat = "yyyy-MM-dd"
+//    let resultString = inputFormatter.string(from: showDate!)
+//    print(resultString)
+//
+    
+    if dateFiled.text == ""
+    {
+        
+    }
+    else
+    {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "dd/MM/yyyy"
+        let showDate = inputFormatter.date(from: dateFiled.text!)
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+        datefinal = inputFormatter.string(from: showDate!)
+        
+    }
     
     
-    Alamofire.request("https://stumbal.com/process.php?action=send_proposal", method: .post, parameters: ["artist_id" : UserDefaults.standard.value(forKey: "ap_artId") as! String, "provider_id" : UserDefaults.standard.value(forKey: "vid") as! String, "proposed_price" : proposalPriceFiled.text!,"date": resultString, "time": timeFiled.text!, "post_detail": proposalTxtView.text!,"video":""],encoding:  URLEncoding.httpBody).responseJSON{ response in
+    Alamofire.request("https://stumbal.com/process.php?action=send_proposal", method: .post, parameters: ["artist_id" : UserDefaults.standard.value(forKey: "ap_artId") as! String, "provider_id" : UserDefaults.standard.value(forKey: "vid") as! String, "proposed_price" : proposalPriceFiled.text!,"date": datefinal, "time": timeFiled.text!, "post_detail": proposalTxtView.text!,"video":"","thumbnail_img":"","thumbnail_img_string":""],encoding:  URLEncoding.httpBody).responseJSON{ response in
         if let data = response.data
         {
             let json = String(data: data, encoding: String.Encoding.utf8)
@@ -287,9 +313,7 @@ func send_proposal()
                     {
                         
                         MBProgressHUD.hide(for: self.view, animated: true)
-                        
-                        
-                        
+                 
                         let alert = UIAlertController(title: "", message: "Proposal Sent Successfully", preferredStyle: .alert)
                         self.present(alert, animated: true, completion: nil)
                         
@@ -371,13 +395,21 @@ func uploadWithAlamofire() {
     hud.self.bezelView.color = UIColor.black
     hud.label.text = "Loading...."
     
+    if dateFiled.text == ""
+    {
+        
+    }
+    else
+    {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "dd/MM/yyyy"
+        let showDate = inputFormatter.date(from: dateFiled.text!)
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+        datefinal = inputFormatter.string(from: showDate!)
+        
+    }
     
-    let inputFormatter = DateFormatter()
-    inputFormatter.dateFormat = "dd/MM/yyyy"
-    let showDate = inputFormatter.date(from: dateFiled.text!)
-    inputFormatter.dateFormat = "yyyy-MM-dd"
-    let resultString = inputFormatter.string(from: showDate!)
-    print(resultString)
+   
     
     
     var imageView = UIImage()
@@ -398,7 +430,7 @@ func uploadWithAlamofire() {
         "artist_id" : UserDefaults.standard.value(forKey: "ap_artId") as! String,
         "provider_id" : UserDefaults.standard.value(forKey: "vid") as! String,
         "proposed_price" : proposalPriceFiled.text!,
-        "date": resultString,
+        "date": datefinal,
         "time": timeFiled.text!,
         "post_detail": proposalTxtView.text!,
         "thumbnail_img" :imagePath ,

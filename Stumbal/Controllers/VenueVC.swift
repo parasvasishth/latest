@@ -23,6 +23,14 @@ var locationManager = CLLocationManager()
 override func viewDidLoad() {
     super.viewDidLoad()
     
+    if #available(iOS 13.0, *) {
+        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+       } else {
+           // Fallback on earlier versions
+       }
+    
+    searchBar.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+    
     venueTblView.dataSource = self
     venueTblView.delegate = self
     // fetch_venues()
@@ -40,6 +48,20 @@ override func viewDidLoad() {
     
     // Do any additional setup after loading the view.
 }
+    
+    override func viewDidLayoutSubviews() {
+
+        setupSearchBar(searchBar: searchBar)
+
+    }
+
+        func setupSearchBar(searchBar : UISearchBar) {
+
+        searchBar.setPlaceholderTextColorTo(color: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1))
+
+       }
+
+    
     override func viewWillAppear(_ animated: Bool) {
         fetch_user_distance()
     }

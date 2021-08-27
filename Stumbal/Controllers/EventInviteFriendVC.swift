@@ -29,6 +29,14 @@ class EventInviteFriendVC: UIViewController,UITableViewDataSource,UITableViewDel
         stumbalFriendobj.backgroundColor = #colorLiteral(red: 0.431372549, green: 0.168627451, blue: 0.6823529412, alpha: 1)
         otherFriendObj.backgroundColor = #colorLiteral(red: 0.6039215686, green: 0.6039215686, blue: 0.6039215686, alpha: 1)
         
+        if #available(iOS 13.0, *) {
+            searchField.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+           } else {
+               // Fallback on earlier versions
+           }
+        
+        searchField.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+        
         DispatchQueue.main.async { [self] in
             otherFriendObj.roundCorners(corners: [.topRight , .bottomRight], radius: 20)
            
@@ -39,6 +47,19 @@ class EventInviteFriendVC: UIViewController,UITableViewDataSource,UITableViewDel
         stumbalFriendobj.roundedButton1()
         // Do any additional setup after loading the view.
     }
+    
+    override func viewDidLayoutSubviews() {
+
+        setupSearchBar(searchBar: searchField)
+
+    }
+
+        func setupSearchBar(searchBar : UISearchBar) {
+
+        searchField.setPlaceholderTextColorTo(color: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1))
+
+       }
+    
     // MARK: - Email Validation
     func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"

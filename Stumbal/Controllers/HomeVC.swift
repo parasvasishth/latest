@@ -54,9 +54,12 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //searchFeild.textColor = #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1)
      
+            searchFeild.attributedPlaceholder =
+            NSAttributedString(string: "Search event by location", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1) ])
         
-        
+   
         mapView.layoutMargins.bottom = -100 // removes the 'legal' text
         mapView.layoutMargins.top = -100 // prevents unneeded misplacement of the camera
         
@@ -68,6 +71,8 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         
         searchFeild.delegate = self
         searchFeild.text = ""
+        
+    
         
         UserDefaults.standard.set(false, forKey: "isotherlocation")
         UserDefaults.standard.removeObject(forKey: "usersource_lat")

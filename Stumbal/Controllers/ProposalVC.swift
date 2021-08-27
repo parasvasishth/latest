@@ -23,6 +23,14 @@ override func viewDidLoad() {
     proposalTblView.delegate = self
     searchBar.delegate = self
     
+    if #available(iOS 13.0, *) {
+        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+       } else {
+           // Fallback on earlier versions
+       }
+    
+    searchBar.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+    
     if UserDefaults.standard.value(forKey:"ap_artId") == nil
     {
         self.statusLbl.isHidden = false
@@ -34,6 +42,19 @@ override func viewDidLoad() {
     }
 }
 
+    override func viewDidLayoutSubviews() {
+
+        setupSearchBar(searchBar: searchBar)
+
+    }
+
+        func setupSearchBar(searchBar : UISearchBar) {
+
+        searchBar.setPlaceholderTextColorTo(color: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1))
+
+       }
+
+    
 @IBAction func back(_ sender: UIButton) {
     self.dismiss(animated: false, completion: nil)
     
@@ -215,11 +236,45 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     let cell =  proposalTblView.dequeueReusableCell(withIdentifier: "ProposalTblCell", for: indexPath) as! ProposalTblCell
     
     cell.nameLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
-    cell.dateLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "date")as! String
-    cell.timelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "time")as! String
+   
+    if (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "date")as! String == ""
+    {
+        cell.dotImg.isHidden = true
+        cell.dateLbl.text = ""
+    }
+    else
+    {
+        cell.dotImg.isHidden = false
+        cell.dateLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "date")as! String
+        
+    }
+    
+    
+     if (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "time")as! String == ""
+     {
+         cell.timeImg.isHidden = true
+         cell.timelbl.text = ""
+     }
+     else
+     {
+         cell.timeImg.isHidden = false
+        cell.timelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "time")as! String
+         
+     }
+    
+  
     let pimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "venue_img")as! String
-   let p = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "proposed_price")as! String
-    cell.priceLbl.text = "$" + p
+    if (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "proposed_price")as! String == ""
+    {
+        cell.priceLbl.text = ""
+    }
+    else
+    {
+        
+      let p = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "proposed_price")as! String
+       cell.priceLbl.text = "$" + p
+    }
+  
     
     if pimg == ""
     {

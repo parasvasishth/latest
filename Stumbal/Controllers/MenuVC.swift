@@ -25,7 +25,7 @@ override func viewDidLoad() {
     let m8=Menu(list: "Proposal History", image: "proposal")
     let m9=Menu(list: "Invite friends", image: "invite")
     let m10=Menu(list: "Settings", image: "setting")
-    let m11=Menu(list: "Contact Stumble", image: "contact")
+    let m11=Menu(list: "Contact Stumbal", image: "contact")
     let m12=Menu(list: "Logout", image: "logout")
 
     menuArray=[m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12]

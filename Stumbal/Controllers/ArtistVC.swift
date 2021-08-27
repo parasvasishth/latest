@@ -27,10 +27,41 @@ override func viewDidLoad() {
     menu.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
     searchBar.delegate = self
     
+    if #available(iOS 13.0, *) {
+        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+       } else {
+           // Fallback on earlier versions
+       }
+    
+    searchBar.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+
+
+    
+    
+       //  categoryFiled.setLeftPaddingPoints(10)
+//       let myColor = #colorLiteral(red: 0.2205514312, green: 0.8281850219, blue: 0.8544245362, alpha: 1)
+//       searchBar.layer.borderColor = myColor.cgColor
+//       searchBar.layer.borderWidth = 1.0
+    
     self.revealViewController().delegate = self
     
 }
 
+    override func viewDidLayoutSubviews() {
+
+        setupSearchBar(searchBar: searchBar)
+
+    }
+
+        func setupSearchBar(searchBar : UISearchBar) {
+
+        searchBar.setPlaceholderTextColorTo(color: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1))
+
+       }
+
+   
+    
+    
 func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
     searchBar.resignFirstResponder()
     
@@ -327,4 +358,14 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     self.present(signuCon, animated: false, completion:nil)
 }
 
+}
+extension UISearchBar
+{
+    func setPlaceholderTextColorTo(color: UIColor)
+    {
+        let textFieldInsideSearchBar = self.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = color
+        let textFieldInsideSearchBarLabel = textFieldInsideSearchBar!.value(forKey: "placeholderLabel") as? UILabel
+        textFieldInsideSearchBarLabel?.textColor = color
+    }
 }

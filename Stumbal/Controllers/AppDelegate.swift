@@ -22,6 +22,10 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     // Override point for customization after application launch.
     IQKeyboardManager.shared.enable = true
     GMSPlacesClient.provideAPIKey("AIzaSyCP7aBsWcyQv1JKVF9vQKP8M_PRk3iB2W0")
+    if #available(iOS 13.0, *) {
+       // Always adopt a light interface style.
+       window?.overrideUserInterfaceStyle = .light
+    }
     
     if UserDefaults.standard.bool(forKey: "login")
     {

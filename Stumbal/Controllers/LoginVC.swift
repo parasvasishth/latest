@@ -523,7 +523,6 @@ func getdetail() {
     //    alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
     //    self.present(alert, animated: false, completion: nil)
     
-    
     UserDefaults.standard.set(true, forKey: "fblogin")
     
     let fbLoginManager : LoginManager = LoginManager()

@@ -616,41 +616,41 @@ func ConvertImageToBase64String (img: UIImage) -> String {
     //                        }
     //            }
                 
-                let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
-                
-                if eimg == ""
-                {
-                   cell.eventImg.image = UIImage(named: "edefault")
-                   
-                }
-                   else
-                {
-                   let url = URL(string: eimg)
-                   let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
-                                |> RoundCornerImageProcessor(cornerRadius: 0)
-                   cell.eventImg.kf.indicatorType = .activity
-                   cell.eventImg.kf.setImage(
-                       with: url,
-                       placeholder: nil,
-                       options: [
-                           .processor(processor),
-                           .scaleFactor(UIScreen.main.scale),
-                           .transition(.fade(1)),
-                           .cacheOriginalImage
-                       ])
-                   {
-                       result in
-                       switch result {
-                       case .success(let value):
-                           print("Task done for: \(value.source.url?.absoluteString ?? "")")
-                       case .failure(let error):
-                           print("Job failed: \(error.localizedDescription)")
-                        cell.eventImg.image = UIImage(named: "edefault")
-                       }
-                   }
-                   
-                }
-                
+//                let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
+//
+//                if eimg == ""
+//                {
+//                   cell.eventImg.image = UIImage(named: "edefault")
+//
+//                }
+//                   else
+//                {
+//                   let url = URL(string: eimg)
+//                   let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
+//                                |> RoundCornerImageProcessor(cornerRadius: 0)
+//                   cell.eventImg.kf.indicatorType = .activity
+//                   cell.eventImg.kf.setImage(
+//                       with: url,
+//                       placeholder: nil,
+//                       options: [
+//                           .processor(processor),
+//                           .scaleFactor(UIScreen.main.scale),
+//                           .transition(.fade(1)),
+//                           .cacheOriginalImage
+//                       ])
+//                   {
+//                       result in
+//                       switch result {
+//                       case .success(let value):
+//                           print("Task done for: \(value.source.url?.absoluteString ?? "")")
+//                       case .failure(let error):
+//                           print("Job failed: \(error.localizedDescription)")
+//                        cell.eventImg.image = UIImage(named: "edefault")
+//                       }
+//                   }
+//
+//                }
+//
                 
                 
                 
@@ -665,7 +665,7 @@ func ConvertImageToBase64String (img: UIImage) -> String {
                 let cd = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_date")as! String
                 let ot = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_time")as! String
                 let ct = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_time")as! String
-                cell.eventTimelbl.text = od + " to " + cd + " timing " + ot + " to " + ct
+              //  cell.eventTimelbl.text = od + " to " + cd + " timing " + ot + " to " + ct
                 
             }
             else
@@ -680,41 +680,41 @@ func ConvertImageToBase64String (img: UIImage) -> String {
     //                        }
     //            }
     //
-                let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
-                
-                if eimg == ""
-                {
-                   cell.eventImg.image = UIImage(named: "edefault")
-                   
-                }
-                   else
-                {
-                   let url = URL(string: eimg)
-                   let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
-                                |> RoundCornerImageProcessor(cornerRadius: 0)
-                   cell.eventImg.kf.indicatorType = .activity
-                   cell.eventImg.kf.setImage(
-                       with: url,
-                       placeholder: nil,
-                       options: [
-                           .processor(processor),
-                           .scaleFactor(UIScreen.main.scale),
-                           .transition(.fade(1)),
-                           .cacheOriginalImage
-                       ])
-                   {
-                       result in
-                       switch result {
-                       case .success(let value):
-                           print("Task done for: \(value.source.url?.absoluteString ?? "")")
-                       case .failure(let error):
-                           print("Job failed: \(error.localizedDescription)")
-                        cell.eventImg.image = UIImage(named: "edefault")
-                       }
-                   }
-                   
-                }
-                
+//                let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
+//
+//                if eimg == ""
+//                {
+//                   cell.eventImg.image = UIImage(named: "edefault")
+//
+//                }
+//                   else
+//                {
+//                   let url = URL(string: eimg)
+//                   let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
+//                                |> RoundCornerImageProcessor(cornerRadius: 0)
+//                   cell.eventImg.kf.indicatorType = .activity
+//                   cell.eventImg.kf.setImage(
+//                       with: url,
+//                       placeholder: nil,
+//                       options: [
+//                           .processor(processor),
+//                           .scaleFactor(UIScreen.main.scale),
+//                           .transition(.fade(1)),
+//                           .cacheOriginalImage
+//                       ])
+//                   {
+//                       result in
+//                       switch result {
+//                       case .success(let value):
+//                           print("Task done for: \(value.source.url?.absoluteString ?? "")")
+//                       case .failure(let error):
+//                           print("Job failed: \(error.localizedDescription)")
+//                        cell.eventImg.image = UIImage(named: "edefault")
+//                       }
+//                   }
+//
+//                }
+//
                 
                 cell.eventNamelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
                 cell.eventAddressLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "address")as! String
@@ -727,7 +727,7 @@ func ConvertImageToBase64String (img: UIImage) -> String {
                 let cd = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_date")as! String
                 let ot = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_time")as! String
                 let ct = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_time")as! String
-                cell.eventTimelbl.text = od + " to " + cd + " timing " + ot + " to " + ct
+               // cell.eventTimelbl.text = od + " to " + cd + " timing " + ot + " to " + ct
                 
             }
             return cell

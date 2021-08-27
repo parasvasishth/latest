@@ -11,7 +11,8 @@ import SDWebImage
 import Kingfisher
 class ArtistSearchVC: UIViewController,UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate {
 
-@IBOutlet var searchArtistTblView: UITableView!
+    @IBOutlet var statusLbl: UILabel!
+    @IBOutlet var searchArtistTblView: UITableView!
 @IBOutlet var searchBar: UISearchBar!
 var hud = MBProgressHUD()
 var pastArray:NSMutableArray = NSMutableArray()
@@ -23,6 +24,14 @@ override func viewDidLoad() {
     super.viewDidLoad()
     searchBar.delegate = self
     
+    if #available(iOS 13.0, *) {
+        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+       } else {
+           // Fallback on earlier versions
+       }
+    
+    searchBar.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+
     searchArtistTblView.dataSource = self
     searchArtistTblView.delegate = self
     if UserDefaults.standard.value(forKey: "userarray") == nil
@@ -35,7 +44,21 @@ override func viewDidLoad() {
         
     }
     fetch_app_user()
+    
 }
+    
+    override func viewDidLayoutSubviews() {
+
+        setupSearchBar(searchBar: searchBar)
+
+    }
+
+        func setupSearchBar(searchBar : UISearchBar) {
+
+        searchBar.setPlaceholderTextColorTo(color: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1))
+
+       }
+
 
 @IBAction func back(_ sender: UIButton) {
     self.dismiss(animated: false, completion: nil)
@@ -110,6 +133,7 @@ func fetch_app_user()
                         if self.searchArray.count != 0 {
                             
                             self.searchArtistTblView.isHidden = false
+                            self.statusLbl.isHidden = true
                             self.searchArtistTblView.reloadData()
                             // self.statusLbl.isHidden = true
                             MBProgressHUD.hide(for: self.view, animated: true)
@@ -117,14 +141,14 @@ func fetch_app_user()
                         else  {
                             
                             self.searchArtistTblView.isHidden = true
-                            //   self.statusLbl.isHidden = false
+                            self.statusLbl.isHidden = false
                             MBProgressHUD.hide(for: self.view, animated: true)
                         }
                     }
                     else
                     {
                         self.searchArtistTblView.isHidden = true
-                        //  self.statusLbl.isHidden = false
+                        self.statusLbl.isHidden = false
                         MBProgressHUD.hide(for: self.view, animated: true)
                     }
                 }

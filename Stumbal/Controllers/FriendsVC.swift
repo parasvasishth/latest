@@ -23,6 +23,18 @@ class FriendsVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UISe
         super.viewDidLoad()
         friendTblView.dataSource = self
         friendTblView.delegate = self
+        
+        
+        if #available(iOS 13.0, *) {
+            searchFeild.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+           } else {
+               // Fallback on earlier versions
+           }
+        
+        searchFeild.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+
+        
+        
         if UserDefaults.standard.value(forKey: "userarray") == nil
         {
             
@@ -36,6 +48,18 @@ class FriendsVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UISe
         searchFeild.delegate = self
         // Do any additional setup after loading the view.
     }
+    
+    override func viewDidLayoutSubviews() {
+
+        setupSearchBar(searchBar: searchFeild)
+
+    }
+
+        func setupSearchBar(searchBar : UISearchBar) {
+
+        searchBar.setPlaceholderTextColorTo(color: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1))
+
+       }
     
     @IBAction func addFriend(_ sender: UIButton) {
         let tagVal : Int = sender.tag
