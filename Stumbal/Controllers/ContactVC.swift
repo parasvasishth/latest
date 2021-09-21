@@ -29,6 +29,7 @@ class ContactVC: UIViewController,WKUIDelegate, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         webView.evaluateJavaScript("confirm('Hello from evaluateJavascript()')", completionHandler: nil)
     }
+    
     func webView(_ webView: WKWebView,
                  runJavaScriptAlertPanelWithMessage message: String,
                  initiatedByFrame frame: WKFrameInfo,

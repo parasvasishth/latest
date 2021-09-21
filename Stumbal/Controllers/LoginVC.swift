@@ -74,6 +74,7 @@ override func viewDidLoad() {
     forgotLbl.addGestureRecognizer(tapGestureRecognizer3)
     
     new = true
+  
     
 }
 

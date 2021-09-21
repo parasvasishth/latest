@@ -129,10 +129,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
             self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         }
-     
 
-       
-      
     }
     
     // MARK: - fetch_user_distance
@@ -508,8 +505,6 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         }
      
         MBProgressHUD.hide(for: self.view, animated: true)
-      
-
     }
    
     //MARK: Make Path
