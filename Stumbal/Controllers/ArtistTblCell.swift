@@ -14,6 +14,7 @@ class ArtistTblCell: UITableViewCell {
     @IBOutlet var categoryLbl: UILabel!
     @IBOutlet var ratinglbl: UILabel!
     @IBOutlet var addfriendObj: UIButton!
+    @IBOutlet weak var profileView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -13,14 +13,10 @@ class SignUpVC: UIViewController {
 @IBOutlet var lastNameField: UITextField!
 @IBOutlet var emaiLField: UITextField!
 @IBOutlet var passwordFiled: UITextField!
-@IBOutlet var dateFiled: UITextField!
-@IBOutlet var maleObj: UIButton!
-@IBOutlet var femaleObj: UIButton!
-@IBOutlet var mobileFiled: UITextField!
-@IBOutlet var passowrdImg: UIImageView!
-@IBOutlet var reenterimg: UIImageView!
 @IBOutlet var confirmpassowrdFiled: UITextField!
-var gender:String = ""
+@IBOutlet var loginlbl: UnderlinedLabel!
+@IBOutlet var hideView: UIView!
+    var gender:String = ""
 var selectGender:Bool = Bool()
 var hud = MBProgressHUD()
 var old:Bool = Bool()
@@ -28,40 +24,43 @@ var new:Bool = Bool()
     var deviceId:String = ""
 override func viewDidLoad() {
     super.viewDidLoad()
+    hideView.isHidden = false
+    loginlbl.text = "Log in now"
     firstNameFiled.attributedPlaceholder =
-        NSAttributedString(string: "Firstname *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        NSAttributedString(string: "First Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     lastNameField.attributedPlaceholder =
-        NSAttributedString(string: "Lastname *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        NSAttributedString(string: "Last Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     emaiLField.attributedPlaceholder =
-        NSAttributedString(string: "Email *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     passwordFiled.attributedPlaceholder =
-        NSAttributedString(string: "Password *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-    dateFiled.attributedPlaceholder =
-        NSAttributedString(string: "Date of birth *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-    mobileFiled.attributedPlaceholder =
-        NSAttributedString(string: "Contact *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     confirmpassowrdFiled.attributedPlaceholder =
-        NSAttributedString(string: "Reenter Password *", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        NSAttributedString(string: "Re-enter Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     
-    firstNameFiled.setLeftPaddingPoints(10)
-    lastNameField.setLeftPaddingPoints(10)
-    emaiLField.setLeftPaddingPoints(10)
-    passwordFiled.setLeftPaddingPoints(10)
-    dateFiled.setLeftPaddingPoints(10)
-    mobileFiled.setLeftPaddingPoints(10)
-    confirmpassowrdFiled.setLeftPaddingPoints(10)
+    firstNameFiled.setLeftPaddingPoints(5)
+    lastNameField.setLeftPaddingPoints(5)
+    emaiLField.setLeftPaddingPoints(5)
+    passwordFiled.setLeftPaddingPoints(5)
+    confirmpassowrdFiled.setLeftPaddingPoints(5)
+    hideView.isHidden = true
+
+  //  dateFiled.addInputViewDatePicker(target: self, selector: #selector(doneButtonPressed))
     
-    dateFiled.addInputViewDatePicker(target: self, selector: #selector(doneButtonPressed))
+//    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+//    passowrdImg.isUserInteractionEnabled = true
+//    passowrdImg.addGestureRecognizer(tapGestureRecognizer)
+//    
+//    let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(imageTapped1(tapGestureRecognizer:)))
+//    reenterimg.isUserInteractionEnabled = true
+//    reenterimg.addGestureRecognizer(tapGestureRecognizer1)
+//    old = true
+//    new = true
     
-    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-    passowrdImg.isUserInteractionEnabled = true
-    passowrdImg.addGestureRecognizer(tapGestureRecognizer)
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(imageTapped2(tapGestureRecognizer:)))
+        loginlbl.isUserInteractionEnabled = true
+    loginlbl.addGestureRecognizer(tapGestureRecognizer2)
     
-    let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(imageTapped1(tapGestureRecognizer:)))
-    reenterimg.isUserInteractionEnabled = true
-    reenterimg.addGestureRecognizer(tapGestureRecognizer1)
-    old = true
-    new = true
+   
     
     // Do any additional setup after loading the view.
 }
@@ -71,13 +70,13 @@ override func viewDidLoad() {
     {
         old = false
         passwordFiled.isSecureTextEntry = false
-        passowrdImg.image = UIImage(named: "eye")
+      //  passowrdImg.image = UIImage(named: "eye")
     }
     else
     {
         old = true
         passwordFiled.isSecureTextEntry = true
-        passowrdImg.image = UIImage(named: "ceye")
+      //  passowrdImg.image = UIImage(named: "ceye")
     }
 }
 
@@ -86,24 +85,32 @@ override func viewDidLoad() {
     {
         new = false
         confirmpassowrdFiled.isSecureTextEntry = false
-        reenterimg.image = UIImage(named: "eye")
+       // reenterimg.image = UIImage(named: "eye")
     }
     else
     {
         new = true
         confirmpassowrdFiled.isSecureTextEntry = true
-        reenterimg.image = UIImage(named: "ceye")
+       // reenterimg.image = UIImage(named: "ceye")
     }
 }
+    
+    @objc func imageTapped2(tapGestureRecognizer: UITapGestureRecognizer){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+    }
 
-@objc func doneButtonPressed() {
-    if let  datePicker = self.dateFiled.inputView as? UIDatePicker {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        self.dateFiled.text = dateFormatter.string(from: datePicker.date)
-    }
-    self.dateFiled.resignFirstResponder()
-}
+
+//@objc func doneButtonPressed() {
+//    if let  datePicker = self.dateFiled.inputView as? UIDatePicker {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "dd/MM/yyyy"
+//        self.dateFiled.text = dateFormatter.string(from: datePicker.date)
+//    }
+//    self.dateFiled.resignFirstResponder()
+//}
 
 // MARK: - Email Validation
 func isValidEmail(_ email: String) -> Bool {
@@ -124,26 +131,33 @@ func isValidPassword(password: String) -> Bool
 
 // MARK: - Action
 @IBAction func male(_ sender: UIButton) {
-    
-    self.maleObj.setImage(UIImage(named: "bfill"), for: .normal)
-    self.femaleObj.setImage(UIImage(named: "bempty"), for: .normal)
-    selectGender = true
-    gender = "Male"
+
+//    self.maleObj.setImage(UIImage(named: "bfill"), for: .normal)
+//    self.femaleObj.setImage(UIImage(named: "bempty"), for: .normal)
+//    selectGender = true
+//    gender = "Male"
 }
 
-@IBAction func female(_ sender: UIButton) {
-    self.femaleObj.setImage(UIImage(named: "bfill"), for: .normal)
-    self.maleObj.setImage(UIImage(named: "bempty"), for: .normal)
-    selectGender = true
-    gender = "Female"
+    @IBAction func cancelBtn(_ sender: UIButton) {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+    }
+    
+    @IBAction func female(_ sender: UIButton) {
+//    self.femaleObj.setImage(UIImage(named: "bfill"), for: .normal)
+//    self.maleObj.setImage(UIImage(named: "bempty"), for: .normal)
+//    selectGender = true
+//    gender = "Female"
 }
 
 @IBAction func signup(_ sender: UIButton) {
     
-    if firstNameFiled.text != "" && lastNameField.text != "" && emaiLField.text != "" && passwordFiled.text != "" && dateFiled.text != "" && mobileFiled.text != "" && confirmpassowrdFiled.text != ""
+    if firstNameFiled.text != "" && lastNameField.text != "" && emaiLField.text != "" && passwordFiled.text != ""  && confirmpassowrdFiled.text != ""
     {
-        if selectGender == true
-        {
+//        if selectGender == true
+//        {
             
             if isValidEmail(emaiLField.text!)
             {
@@ -184,19 +198,19 @@ func isValidPassword(password: String) -> Bool
             }
             else
             {
-                let alert = UIAlertController(title: "", message: "Invalid Emaill Id", preferredStyle: UIAlertController.Style.alert)
+                let alert = UIAlertController(title: "", message: "Invalid Email Id", preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
         }
-        else
-        {
-            MBProgressHUD.hide(for: self.view, animated: true)
-            let alert = UIAlertController(title: "", message: "Please Select Gender", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
+//        else
+//        {
+//            MBProgressHUD.hide(for: self.view, animated: true)
+//            let alert = UIAlertController(title: "", message: "Please Select Gender", preferredStyle: UIAlertController.Style.alert)
+//            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
+//        }
+//    }
     else
     {
         let alert = UIAlertController(title: "", message: "All Field Required", preferredStyle: UIAlertController.Style.alert)
@@ -210,11 +224,13 @@ func isValidPassword(password: String) -> Bool
     self.lastNameField.text = ""
     self.emaiLField.text = ""
     self.passwordFiled.text = ""
-    self.dateFiled.text = ""
+   // self.dateFiled.text = ""
     self.gender = ""
     self.selectGender = false
-    self.mobileFiled.text = ""
-    self.dismiss(animated: false, completion: nil)
+   // self.mobileFiled.text = ""
+    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+    signuCon.modalPresentationStyle = .fullScreen
+    self.present(signuCon, animated: false, completion:nil)
     
 }
     // MARK: - updateDeviceId
@@ -271,13 +287,27 @@ func isValidPassword(password: String) -> Bool
                                 self.lastNameField.text = ""
                                 self.emaiLField.text = ""
                                 self.passwordFiled.text = ""
-                                self.dateFiled.text = ""
+                               // self.dateFiled.text = ""
                                 self.gender = ""
                                 self.selectGender = false
-                                self.mobileFiled.text = ""
-                                var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "CategoryVC") as! CategoryVC
-                                signuCon.modalPresentationStyle = .fullScreen
-                                self.present(signuCon, animated: false, completion:nil)
+                              //  self.mobileFiled.text = ""
+                                self.hideView.isHidden = true
+                                let alert = UIAlertController(title: "", message: "Signup Successful", preferredStyle: .alert)
+                                self.present(alert, animated: true, completion: nil)
+                                
+                                // change to desired number of seconds (in this case 5 seconds)
+                                let when = DispatchTime.now() + 2
+                                
+                                DispatchQueue.main.asyncAfter(deadline: when){
+                                    // your code with delay
+                                    alert.dismiss(animated: false, completion: nil)
+                                    
+                                    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                                    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+                                    nextViewController.modalPresentationStyle = .fullScreen
+                                    self.present(nextViewController, animated:false, completion:nil)
+                                    //  self.fecth_Profile()
+                                }
                                 
                                 
                             }
@@ -293,10 +323,12 @@ func isValidPassword(password: String) -> Bool
 func registration()
 {
     
-    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-    hud.mode = MBProgressHUDMode.indeterminate
-    hud.self.bezelView.color = UIColor.black
-    hud.label.text = "Loading...."
+//    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+//    hud.mode = MBProgressHUDMode.indeterminate
+//    hud.self.bezelView.color = UIColor.black
+//    hud.label.text = "Loading...."
+    
+    hideView.isHidden = false
     
     // arrSelectedData = ["Bob", "Dan", "Bryan"]
     // let string1 = arrSelectedData.joined(separator: ",")
@@ -305,7 +337,7 @@ func registration()
     
     //  print(finalcat) // prints: "BobDanBryan"
     
-    Alamofire.request("https://stumbal.com/process.php?action=user_registration", method: .post, parameters:["log_type":"Signup","fb_id":"","google_id":"","fname": firstNameFiled.text!,"lname":lastNameField.text!,"gender":gender,"email":emaiLField.text!,"password":passwordFiled.text!,"dob":dateFiled.text!,"meta_tags":"","contact":mobileFiled.text!],encoding:  URLEncoding.httpBody).responseJSON{ response in
+    Alamofire.request("https://stumbal.com/process.php?action=user_registration", method: .post, parameters:["log_type":"Signup","fb_id":"","google_id":"","fname": firstNameFiled.text!,"lname":lastNameField.text!,"gender":gender,"email":emaiLField.text!,"password":passwordFiled.text!,"dob":"","meta_tags":"","contact":""],encoding:  URLEncoding.httpBody).responseJSON{ response in
         if let data = response.data
         {
             let json = String(data: data, encoding: String.Encoding.utf8)
@@ -340,10 +372,9 @@ func registration()
                         
                         self.updateDeviceId()
                         
-                        
                     }
                     else {
-                        
+                        self.hideView.isHidden = true
                         MBProgressHUD.hide(for: self.view, animated: false)
                         let alert = UIAlertController(title: "", message: result, preferredStyle: UIAlertController.Style.alert)
                         alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))

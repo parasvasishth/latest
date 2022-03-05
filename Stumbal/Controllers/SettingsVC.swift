@@ -12,6 +12,10 @@ class SettingsVC: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate,U
 @IBOutlet var distanceLbl: UILabel!
 @IBOutlet var sistanceslider: UISlider!
     @IBOutlet var dayFiled: UITextField!
+    @IBOutlet weak var passwordlbl: UILabel!
+    @IBOutlet weak var notificationLbl: UILabel!
+    @IBOutlet weak var supportLbl: UILabel!
+    @IBOutlet weak var blockLbl: UILabel!
     var dist  = Int()
 var minprice  = Int()
 var maxprice  = Int()
@@ -22,26 +26,79 @@ var hud = MBProgressHUD()
 var distance:String = ""
 override func viewDidLoad() {
     super.viewDidLoad()
-    dayFiled.setLeftPaddingPoints(15)
-    dayFiled.attributedPlaceholder =
-        NSAttributedString(string: "Select Days", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-    myPicker2Data1 = ["1 Day" , "2 Days" , "3 Days", "4 Days" , "5 Days" ,"6 Days" , "7 Days"]
+  //  dayFiled.setLeftPaddingPoints(15)
+   // dayFiled.attributedPlaceholder =
+    //    NSAttributedString(string: "Select Days", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+  //  myPicker2Data1 = ["1 Day" , "2 Days" , "3 Days", "4 Days" , "5 Days" ,"6 Days" , "7 Days"]
     fetch_user_distance()
-    thePicker.isHidden = true
-    thePicker.delegate = self
-    thePicker.dataSource = self
-    dayFiled.inputView = thePicker
-    dayFiled.delegate = self
+//    thePicker.isHidden = true
+//    thePicker.delegate = self
+//    thePicker.dataSource = self
+//    dayFiled.inputView = thePicker
+//    dayFiled.delegate = self
+    
+    let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(imageTapped1(tapGestureRecognizer:)))
+    passwordlbl.isUserInteractionEnabled = true
+    passwordlbl.addGestureRecognizer(tapGestureRecognizer1)
+    
+    let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(imageTapped2(tapGestureRecognizer:)))
+    notificationLbl.isUserInteractionEnabled = true
+    notificationLbl.addGestureRecognizer(tapGestureRecognizer2)
+    
+    let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(imageTapped3(tapGestureRecognizer:)))
+    supportLbl.isUserInteractionEnabled = true
+    supportLbl.addGestureRecognizer(tapGestureRecognizer3)
+    
+    let tapGestureRecognizer4 = UITapGestureRecognizer(target: self, action: #selector(imageTapped4(tapGestureRecognizer:)))
+    blockLbl.isUserInteractionEnabled = true
+    blockLbl.addGestureRecognizer(tapGestureRecognizer4)
+   
 }
 
+    @objc func imageTapped1(tapGestureRecognizer: UITapGestureRecognizer){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "New", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewChangePasswordVC") as! NewChangePasswordVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+    }
+    
+    @objc func imageTapped2(tapGestureRecognizer: UITapGestureRecognizer){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Second", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ManageNotificationVC") as! ManageNotificationVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+
+    }
+    
+    @objc func imageTapped3(tapGestureRecognizer: UITapGestureRecognizer){
+       
+        let storyBoard : UIStoryboard = UIStoryboard(name: "New", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ReportVC") as! ReportVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+
+    }
+    
+    @objc func imageTapped4(tapGestureRecognizer: UITapGestureRecognizer){
+       
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "BlockListVC") as! BlockListVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+
+    }
+    
 @IBAction func slideraction(_ sender: UISlider) {
     var currentValue = Int(sender.value)
-    distanceLbl.text = String(format: "%dKm", currentValue)
+    distanceLbl.text = String(format: "Search radius: %dKM", currentValue)
+    
     dist = currentValue
     distance = String(currentValue)
+    insert_user_distance()
 }
 
 @IBAction func back(_ sender: UIButton) {
+   
     self.dismiss(animated: false, completion: nil)
 }
 
@@ -94,22 +151,24 @@ func fetch_user_distance()
                     {
                         self.distance = "5"
                         self.dist = Int(self.distance)!
-                        self.distanceLbl.text = self.distance
+                        //self.distanceLbl.text = self.distance
+                        distanceLbl.text = String(format: "Search radius: %dKM", self.dist)
                         self.sistanceslider.minimumValue = Float(self.dist)
                     }
                     else
                     {
                         self.distance = json["distance"] as! String
                         self.dist = Int(self.distance)!
-                        self.distanceLbl.text = self.distance
+                       // self.distanceLbl.text = self.distance
+                        distanceLbl.text = String(format: "Search radius: %dKM", self.dist)
                         self.sistanceslider.value = Float(self.dist)
                     }
                     
                     self.distanceLbl.isHidden = false
                     self.sistanceslider.isHidden = false
-                    self.fetch_remainder_day()
+                  //  self.fetch_remainder_day()
                     
-                   // MBProgressHUD.hide(for: self.view, animated: true)
+                    MBProgressHUD.hide(for: self.view, animated: true)
                 }
                 else
                 {
@@ -152,9 +211,9 @@ func insert_user_distance()
                 {
                     if json["result"] as! String == "success"
                     {
-                        
-                        self.set_event_remainder_day()
-                     
+                       /// self.dismiss(animated: false, completion: nil)
+                       // self.set_event_remainder_day()
+                        MBProgressHUD.hide(for: self.view, animated: true)
                     }
                     else
                     {

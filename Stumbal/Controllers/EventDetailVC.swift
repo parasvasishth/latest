@@ -222,6 +222,10 @@ class EventDetailVC: UIViewController,CLLocationManagerDelegate,UICollectionView
             signuCon.modalPresentationStyle = .fullScreen
             self.present(signuCon, animated: false, completion:nil)
             
+//            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "NewArtistUserProfileVC") as! NewArtistUserProfileVC
+//            signuCon.modalPresentationStyle = .fullScreen
+//            self.present(signuCon, animated: false, completion:nil)
+            
         }
         
     }
@@ -414,6 +418,8 @@ class EventDetailVC: UIViewController,CLLocationManagerDelegate,UICollectionView
             }
         }
         
+        
+        
     }
     func addEventToCalendar() {
         
@@ -480,8 +486,8 @@ class EventDetailVC: UIViewController,CLLocationManagerDelegate,UICollectionView
         return cell
         
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         if categoryArray[indexPath.row] as! String == "Direction"
         {
             //        let la = (UserDefaults.standard.value(forKey: "Event_lat") as! NSString).doubleValue
@@ -494,9 +500,10 @@ class EventDetailVC: UIViewController,CLLocationManagerDelegate,UICollectionView
             //        mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving])
             
             //UserDefaults.standard.set(true, forKey: "eventdirection")
-            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "DirectionVC") as! DirectionVC
-            signuCon.modalPresentationStyle = .fullScreen
-            self.present(signuCon, animated: false, completion:nil)
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "DirectionVC") as! DirectionVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
             
         }
         else if categoryArray[indexPath.row] as! String == "Add To Calendar"
@@ -547,31 +554,39 @@ class EventDetailVC: UIViewController,CLLocationManagerDelegate,UICollectionView
         }
         else if categoryArray[indexPath.row] as! String == "Invite Friend"
         {
-            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "EventInviteFriendVC") as! EventInviteFriendVC
-            signuCon.modalPresentationStyle = .fullScreen
-            self.present(signuCon, animated: false, completion:nil)
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewInviteFriendOnEventVC") as! NewInviteFriendOnEventVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
         }
         
         else if categoryArray[indexPath.row] as! String == "Buy Tickets"
         {
-            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "BuyTicketVC") as! BuyTicketVC
-            signuCon.modalPresentationStyle = .fullScreen
-            self.present(signuCon, animated: false, completion:nil)
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "BuyTicketVC") as! BuyTicketVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
         }
         
         else if categoryArray[indexPath.row] as! String == "View Artist"
         {
             if UserDefaults.standard.value(forKey: "Event_artid") as! String == ""
             {
-                var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "BlankArtistProfileVC") as! BlankArtistProfileVC
-                signuCon.modalPresentationStyle = .fullScreen
-                self.present(signuCon, animated: false, completion:nil)
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "BlankArtistProfileVC") as! BlankArtistProfileVC
+                nextViewController.modalPresentationStyle = .fullScreen
+                self.present(nextViewController, animated:false, completion:nil)
             }
             else
             {
-                var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "ArtistUserProfileVC") as! ArtistUserProfileVC
-                signuCon.modalPresentationStyle = .fullScreen
-                self.present(signuCon, animated: false, completion:nil)
+//                var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "ArtistUserProfileVC") as! ArtistUserProfileVC
+//                signuCon.modalPresentationStyle = .fullScreen
+//                self.present(signuCon, animated: false, completion:nil)
+                
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewArtistUserProfileVC") as! NewArtistUserProfileVC
+                nextViewController.modalPresentationStyle = .fullScreen
+                self.present(nextViewController, animated:false, completion:nil)
                 
             }
             
@@ -579,23 +594,26 @@ class EventDetailVC: UIViewController,CLLocationManagerDelegate,UICollectionView
         }
         else if categoryArray[indexPath.row] as! String == "Venue"
         {
-            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "ServiceProviderDetailVC") as! ServiceProviderDetailVC
-            signuCon.modalPresentationStyle = .fullScreen
-            self.present(signuCon, animated: false, completion:nil)
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Second", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewVenueDetailVC") as! NewVenueDetailVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
         }
         
         else if categoryArray[indexPath.row] as! String == "Review"
         {
             UserDefaults.standard.set(true, forKey: "EventRating")
-            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "VendorRatingVC") as! VendorRatingVC
-            signuCon.modalPresentationStyle = .fullScreen
-            self.present(signuCon, animated: false, completion:nil)
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "VendorRatingVC") as! VendorRatingVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
         }
         else if categoryArray[indexPath.row] as! String == "Friends On Event"
         {
-            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "FriendOnEvent") as! FriendOnEvent
-            signuCon.modalPresentationStyle = .fullScreen
-            self.present(signuCon, animated: false, completion:nil)
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewFriendOnEventVC") as! NewFriendOnEventVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
         }
         
     }

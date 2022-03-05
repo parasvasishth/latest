@@ -15,27 +15,56 @@ class ArtistVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UISea
 @IBOutlet var searchBar: UISearchBar!
 @IBOutlet var menu: UIButton!
 @IBOutlet var statusLbl: UILabel!
-var hud = MBProgressHUD()
+    @IBOutlet weak var loadingView: UIView!
+    var hud = MBProgressHUD()
 var AppendArr:NSMutableArray = NSMutableArray()
 var pastArray:NSMutableArray = NSMutableArray()
 var artistRating:String = ""
 override func viewDidLoad() {
     super.viewDidLoad()
-    
+    tabBarController?.tabBar.isHidden = true
+    loadingView.isHidden = false
     artistTblView.dataSource = self
     artistTblView.delegate = self
-    menu.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
+//    menu.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
     searchBar.delegate = self
     
+//    if #available(iOS 13.0, *) {
+//        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+//       } else {
+//           // Fallback on earlier versions
+//       }
+//
+//    searchBar.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+//
+
+    let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+    textFieldInsideSearchBar?.textColor = UIColor.white
+
+    
+    UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).leftViewMode = .never
+    searchBar.delegate = self
     if #available(iOS 13.0, *) {
-        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1411764706, green: 0.1411764706, blue: 0.1411764706, alpha: 1)
+        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1098039216, alpha: 1)
        } else {
            // Fallback on earlier versions
        }
     
-    searchBar.setImage(UIImage(named: "search1"), for: .search, state: .normal)
+    if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
 
+        //textfield.backgroundColor = UIColor.yellow
+        textfield.attributedPlaceholder = NSAttributedString(string: textfield.placeholder ?? "Search bar", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).font = UIFont.systemFont(ofSize: 10)
 
+        textfield.setLeftPaddingPoints(5)
+        textfield.clearButtonMode = .never
+       // textfield.textColor = UIColor.green
+
+//        if let leftView = textfield.leftView as? UIImageView {
+//            leftView.image = leftView.image?.withRenderingMode(.alwaysTemplate)
+//            leftView.tintColor = UIColor.red
+//        }
+    }
     
     
        //  categoryFiled.setLeftPaddingPoints(10)
@@ -43,7 +72,7 @@ override func viewDidLoad() {
 //       searchBar.layer.borderColor = myColor.cgColor
 //       searchBar.layer.borderWidth = 1.0
     
-    self.revealViewController().delegate = self
+   // self.revealViewController().delegate = self
     
 }
 
@@ -69,76 +98,83 @@ func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 
 override func viewWillAppear(_ animated: Bool) {
     
-    if self.revealViewController() != nil {
-        
-        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
-    }
-    
+//    if self.revealViewController() != nil {
+//
+//        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+//        self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+//    }
+    tabBarController?.tabBar.isHidden = true
+    loadingView.isHidden = false
     fetch_all_artist()
 }
 
-func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
-    
-    switch position {
-    
-    case FrontViewPosition.leftSideMostRemoved:
-        print("LeftSideMostRemoved")
-    // UserDefaults.standard.set(true, forKey: "homesw")
-    // Left most position, front view is presented left-offseted by rightViewRevealWidth+rigthViewRevealOverdraw
-    
-    case FrontViewPosition.leftSideMost:
-        print("LeftSideMost")
-    // Left position, front view is presented left-offseted by rightViewRevealWidth
-    
-    case FrontViewPosition.leftSide:
-        print("LeftSide")
-        
-    // Center position, rear view is hidden behind front controller
-    case FrontViewPosition.left:
-        print("Left")
-        //Closed
-        //0 rotation
-        UserDefaults.standard.set(false, forKey: "homesw")
-        
-        
-    // Right possition, front view is presented right-offseted by rearViewRevealWidth
-    case FrontViewPosition.right:
-        print("Right")
-        UserDefaults.standard.set(true, forKey: "homesw")
-    //Opened
-    //rotated
-    
-    // Right most possition, front view is presented right-offseted by rearViewRevealWidth+rearViewRevealOverdraw
-    
-    case FrontViewPosition.rightMost:
-        print("RightMost")
-        
-    // Front controller is removed from view. Animated transitioning from this state will cause the sam
-    // effect than animating from FrontViewPositionRightMost. Use this instead of FrontViewPositionRightMost when
-    // you intent to remove the front controller view from the view hierarchy.
-    
-    case FrontViewPosition.rightMostRemoved:
-        print("RightMostRemoved")
-        
+    @IBAction func back(_ sender: UIButton) {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
     }
-    
-}
+//    func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
+//    
+//    switch position {
+//    
+//    case FrontViewPosition.leftSideMostRemoved:
+//        print("LeftSideMostRemoved")
+//    // UserDefaults.standard.set(true, forKey: "homesw")
+//    // Left most position, front view is presented left-offseted by rightViewRevealWidth+rigthViewRevealOverdraw
+//    
+//    case FrontViewPosition.leftSideMost:
+//        print("LeftSideMost")
+//    // Left position, front view is presented left-offseted by rightViewRevealWidth
+//    
+//    case FrontViewPosition.leftSide:
+//        print("LeftSide")
+//        
+//    // Center position, rear view is hidden behind front controller
+//    case FrontViewPosition.left:
+//        print("Left")
+//        //Closed
+//        //0 rotation
+//        UserDefaults.standard.set(false, forKey: "homesw")
+//        
+//        
+//    // Right possition, front view is presented right-offseted by rearViewRevealWidth
+//    case FrontViewPosition.right:
+//        print("Right")
+//        UserDefaults.standard.set(true, forKey: "homesw")
+//    //Opened
+//    //rotated
+//    
+//    // Right most possition, front view is presented right-offseted by rearViewRevealWidth+rearViewRevealOverdraw
+//    
+//    case FrontViewPosition.rightMost:
+//        print("RightMost")
+//        
+//    // Front controller is removed from view. Animated transitioning from this state will cause the sam
+//    // effect than animating from FrontViewPositionRightMost. Use this instead of FrontViewPositionRightMost when
+//    // you intent to remove the front controller view from the view hierarchy.
+//    
+//    case FrontViewPosition.rightMostRemoved:
+//        print("RightMostRemoved")
+//        
+//    }
+//    
+//}
 
 
 //MARK: fetch_all_artist ;
 func fetch_all_artist()
 {
     
-    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-    hud.mode = MBProgressHUDMode.indeterminate
-    hud.self.bezelView.color = UIColor.black
-    hud.label.text = "Loading...."
+//    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+//    hud.mode = MBProgressHUDMode.indeterminate
+//    hud.self.bezelView.color = UIColor.black
+//    hud.label.text = "Loading...."
     let uID = UserDefaults.standard.value(forKey: "u_Id") as! String
     
     print("123",uID)
     
-    Alamofire.request("https://stumbal.com/process.php?action=fetch_all_artist", method: .post, parameters: ["user_id":uID], encoding:  URLEncoding.httpBody).responseJSON { response in
+    Alamofire.request("https://stumbal.com/process.php?action=fetch_all_artist", method: .post, parameters: ["user_id":uID,"search":searchBar.text!], encoding:  URLEncoding.httpBody).responseJSON { response in
         if let data = response.data {
             let json = String(data: data, encoding: String.Encoding.utf8)
             print("=====1======")
@@ -147,6 +183,7 @@ func fetch_all_artist()
             if json == ""
             {
                 MBProgressHUD.hide(for: self.view, animated: true);
+                self.loadingView.isHidden = true
                 let alert = UIAlertController(title: "", message: "Loading...", preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
                     print("Action")
@@ -165,13 +202,16 @@ func fetch_all_artist()
                         self.statusLbl.isHidden = true
                         self.artistTblView.isHidden = false
                         self.artistTblView.reloadData()
-                        
+                        self.loadingView.isHidden = true
+                        self.tabBarController?.tabBar.isHidden = false
                         MBProgressHUD.hide(for: self.view, animated: true)
                     }
                     
                     else  {
                         self.artistTblView.isHidden = true
                         self.statusLbl.isHidden = false
+                        self.loadingView.isHidden = true
+                        self.tabBarController?.tabBar.isHidden = false
                         MBProgressHUD.hide(for: self.view, animated: true)
                     }
                     
@@ -276,7 +316,10 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     let cell =  artistTblView.dequeueReusableCell(withIdentifier: "ArtistTblCell", for: indexPath) as! ArtistTblCell
     
     cell.namelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "name")as! String
-    cell.categoryLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "category_name")as! String
+ //   cell.categoryLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "category_name")as! String
+    cell.profileView.layer.cornerRadius = cell.profileView.frame.height / 2
+    cell.profileView.layer.masksToBounds = false
+    cell.profileView.clipsToBounds = true
     
     let ai:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_img")as! String
     
@@ -313,16 +356,16 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
         
     }
     
-    let ar = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "avg_rating")as! String
-    if ar == ""
-    {
-        cell.ratinglbl.text = "0" + "/5"
-    }
-    else
-    {
-        cell.ratinglbl.text = ar + "/5"
-    }
-    
+//    let ar = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "avg_rating")as! String
+//    if ar == ""
+//    {
+//        cell.ratinglbl.text = "0" + "/5"
+//    }
+//    else
+//    {
+//        cell.ratinglbl.text = ar + "/5"
+//    }
+//
     return cell
 }
 
@@ -353,9 +396,10 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     UserDefaults.standard.setValue(ai, forKey: "Event_artid")
     UserDefaults.standard.setValue(aimg, forKey: "Event_artimg")
     
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "ArtistUserProfileVC") as! ArtistUserProfileVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewArtistUserProfileVC") as! NewArtistUserProfileVC
+    nextViewController.modalPresentationStyle = .fullScreen
+    self.present(nextViewController, animated:false, completion:nil)
 }
 
 }

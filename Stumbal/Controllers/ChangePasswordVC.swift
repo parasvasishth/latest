@@ -14,6 +14,7 @@ class ChangePasswordVC: UIViewController {
 var hud = MBProgressHUD()
 override func viewDidLoad() {
     super.viewDidLoad()
+    
     oldFiled.attributedPlaceholder =
         NSAttributedString(string: "Old Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
     newFiled.attributedPlaceholder =

@@ -149,7 +149,7 @@ override func viewDidLoad() {
 func textFieldDidBeginEditing(_ textField: UITextField) {
     if textField == providerFiled
     {
-       // fetch_venues()
+       fetch_venues()
        
         
     }

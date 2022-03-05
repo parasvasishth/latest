@@ -26,7 +26,7 @@ class EventInviteFriendVC: UIViewController,UITableViewDataSource,UITableViewDel
         friendTblView.dataSource = self
         friendTblView.dataSource = self
           fetch_friend_list()
-        stumbalFriendobj.backgroundColor = #colorLiteral(red: 0.431372549, green: 0.168627451, blue: 0.6823529412, alpha: 1)
+        stumbalFriendobj.backgroundColor = #colorLiteral(red: 0.337254902, green: 0.8039215686, blue: 0.7607843137, alpha: 1)
         otherFriendObj.backgroundColor = #colorLiteral(red: 0.6039215686, green: 0.6039215686, blue: 0.6039215686, alpha: 1)
         
         if #available(iOS 13.0, *) {

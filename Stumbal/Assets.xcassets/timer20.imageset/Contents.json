@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "Webp.net-resizeimage (21).png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Webp.net-resizeimage (22).png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Webp.net-resizeimage (23).png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

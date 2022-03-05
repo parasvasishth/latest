@@ -37,6 +37,21 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
     @IBOutlet var addressLbl: UILabel!
     @IBOutlet var searchFeild: UITextField!
     @IBOutlet var menuObj1: UIButton!
+    @IBOutlet var loadingView: UIView!
+    @IBOutlet weak var eventView: UIView!
+    @IBOutlet weak var eventMenu: UIButton!
+    @IBOutlet weak var hilLbl: UILabel!
+    @IBOutlet weak var map: MKMapView!
+    @IBOutlet weak var exploreObj: UIButton!
+    @IBOutlet weak var eventTblView: UITableView!
+    @IBOutlet weak var mapExploreView: UIView!
+    @IBOutlet weak var backgroundImg: UIImageView!
+    @IBOutlet weak var searchView: UIView!
+    @IBOutlet weak var gpsObj: UIButton!
+    @IBOutlet weak var mapmenuObj: UIButton!
+    @IBOutlet weak var newSearchImg: UIImageView!
+    @IBOutlet weak var ratingLbl: UILabel!
+    @IBOutlet weak var exploreGpsObj: UIButton!
     var lat:Float = 0
     var long:Float = 0
     var locationManager = CLLocationManager()
@@ -45,20 +60,31 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
     var annotation1 = MKPointAnnotation()
     var latLongAry = NSMutableArray()
     var pastArray = NSMutableArray()
-    
+    var AppendArr:NSMutableArray = NSMutableArray()
     
     let geocoder = CLGeocoder()
     private var tileRenderer: MKTileOverlayRenderer?
     var distance:String = ""
     var cat_id:String = ""
-
+    var providerRating:String = ""
+    var artistRating:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBarController?.tabBar.isHidden = true
         //searchFeild.textColor = #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1)
-     
-            searchFeild.attributedPlaceholder =
-            NSAttributedString(string: "Search event by location", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1) ])
+        self.loadingView.isHidden = false
+    //mapView.layer.backgroundColor = #colorLiteral(red: 0.8078431373, green: 0.6745098039, blue: 0.8392156863, alpha: 1)
         
+        showView.roundCorners(corners: [.topLeft, .topRight], radius: 10.0)
+        mapView.isHidden = true
+        eventTblView.backgroundColor = .clear
+        eventTblView.dataSource = self
+        eventTblView.delegate = self
+            searchFeild.attributedPlaceholder =
+            NSAttributedString(string: "", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.5176470588, green: 0.5176470588, blue: 0.5176470588, alpha: 1) ])
+        
+     
+        //Search event by location
    
         mapView.layoutMargins.bottom = -100 // removes the 'legal' text
         mapView.layoutMargins.top = -100 // prevents unneeded misplacement of the camera
@@ -66,6 +92,8 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         menu.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
         
         menuObj1.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
+        
+        eventMenu.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
         
         self.revealViewController().delegate = self
         
@@ -87,12 +115,25 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         self.view.addGestureRecognizer(swipeDown)
     
         mapView.delegate = self
+        
+        backgroundImg.layer.masksToBounds = false
+        backgroundImg.layer.shadowColor = #colorLiteral(red: 0.1058823529, green: 0.003921568627, blue: 0.1529411765, alpha: 1)
+        backgroundImg.layer.shadowOpacity = 0.50
+        backgroundImg.layer.shadowRadius = 2
+        backgroundImg.layer.cornerRadius = 2
+        
+        
+        UITabBarItem.appearance().titlePositionAdjustment = UIOffset(horizontal: 0, vertical: 5) 
+       // self.tabBarController?.tabBar.isHidden = true
+       
     }
 
 
     override func viewWillAppear(_ animated: Bool) {
+        self.loadingView.isHidden = false
         if UserDefaults.standard.bool(forKey: "isotherlocation") == true
         {
+           
             check_artist_user()
             //self.getCurrentlocationofUser()
             
@@ -150,6 +191,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                 if json == ""
                 {
                     MBProgressHUD.hide(for: self.view, animated: true);
+                    self.loadingView.isHidden = true
                     let alert = UIAlertController(title: "Loading...", message: "", preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
                     print("Action")
@@ -234,13 +276,23 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         
     }
     
+    @IBAction func exploreGps(_ sender: UIButton) {
+    }
+    @IBAction func exploreBtn(_ sender: UIButton) {
+        mapView.isHidden = false
+       // searchView.isHidden = false
+        gpsObj.isHidden = false
+        mapmenuObj.isHidden = false
+        newSearchImg.isHidden = false
+        searchFeild.isHidden = false
+    }
+    
     @IBAction func gps(_ sender: UIButton) {
         searchFeild.text = ""
         getCurrentlocationofUser()
     }
     
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
-        
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             
             switch swipeGesture.direction {
@@ -264,10 +316,10 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
     func fecth_Profile()
     {
         
-        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-        hud.mode = MBProgressHUDMode.indeterminate
-        hud.self.bezelView.color = UIColor.black
-        hud.label.text = "Loading...."
+//        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+//        hud.mode = MBProgressHUDMode.indeterminate
+//        hud.self.bezelView.color = UIColor.black
+//        hud.label.text = "Loading...."
         Alamofire.request("https://stumbal.com/process.php?action=fetch_user_profile", method: .post, parameters: ["user_id" : UserDefaults.standard.value(forKey: "u_Id") as! String], encoding:  URLEncoding.httpBody).responseJSON
         { response in
             if let data = response.data
@@ -284,8 +336,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                         self.fecth_Profile()
                     }))
                     self.present(alert, animated: true, completion: nil)
-                    
-                    
+
                 }
                 else
                 {
@@ -293,13 +344,15 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                     
                     {
                         self.cat_id = json["cat_name"] as! String
+                        let n:String = json["fname"] as! String 
+                        self.hilLbl.text = "Hi" + " " + n + "."
                         self.getCurrentlocationofUser()
                         MBProgressHUD.hide(for: self.view, animated: true)
-                        
-                        
+                
                     }
                     else
                     {
+                        self.loadingView.isHidden = true
                         MBProgressHUD.hide(for: self.view, animated: true)
                     }
                 }
@@ -313,10 +366,10 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
     func check_artist_user()
     {
         
-        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-        hud.mode = MBProgressHUDMode.indeterminate
-        hud.self.bezelView.color = UIColor.black
-        hud.label.text = "Loading...."
+//        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+//        hud.mode = MBProgressHUDMode.indeterminate
+//        hud.self.bezelView.color = UIColor.black
+//        hud.label.text = "Loading...."
         Alamofire.request("https://stumbal.com/process.php?action=check_artist_user", method: .post, parameters: ["user_id" : UserDefaults.standard.value(forKey: "u_Id") as! String], encoding:  URLEncoding.httpBody).responseJSON
         { response in
             if let data = response.data
@@ -327,6 +380,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                 if json == ""
                 {
                     MBProgressHUD.hide(for: self.view, animated: true);
+                    self.loadingView.isHidden = true
                     let alert = UIAlertController(title: "Loading...", message: "", preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
                     print("Action")
@@ -365,6 +419,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                     }
                     else
                     {
+                        self.loadingView.isHidden = true
                         MBProgressHUD.hide(for: self.view, animated: true)
                     }
                 }
@@ -389,6 +444,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
     
     @IBAction func cancelView(_ sender: UIButton) {
         showView.isHidden = true
+        exploreGpsObj.isHidden = true
     }
     
     
@@ -396,9 +452,10 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         //showView.isHidden = true
         
         UserDefaults.standard.set(true, forKey: "HomeEvent")
-        var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "ServiceProviderDetailVC") as! ServiceProviderDetailVC
-        signuCon.modalPresentationStyle = .fullScreen
-        self.present(signuCon, animated: false, completion:nil)
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Second", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewVenueDetailVC") as! NewVenueDetailVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
         
     }
     
@@ -419,12 +476,146 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         self.locationManager.delegate = self
         self.mapView.showsUserLocation = true
         self.mapView.delegate = self;
+        self.map.showsUserLocation = true
+        self.map.delegate = self;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
     }
     
 
+    //MARK: fetch_events ;
+    func fetch_events()
+    {
+        // UserDefaults.standard.set(self.userId, forKey: "User id")
+        //    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        //    hud.mode = MBProgressHUDMode.indeterminate
+        //    hud.self.bezelView.color = UIColor.black
+        //    hud.label.text = "Loading...."
+        let uID = UserDefaults.standard.value(forKey: "u_Id") as! String
+        
+        print("123",uID)
+        
+        Alamofire.request("https://stumbal.com/process.php?action=top_events", method: .post, parameters: ["lat":lat,"lng":long], encoding:  URLEncoding.httpBody).responseJSON { response in
+            if let data = response.data {
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print("=====1======")
+                print("Response: \(String(describing: json))")
+                
+                if json == ""
+                {
+                    MBProgressHUD.hide(for: self.view, animated: true);
+                    let alert = UIAlertController(title: "Loading...", message: "", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
+                        print("Action")
+                        self.fetch_events()
+                    }))
+                    self.present(alert, animated: false, completion: nil)
+                    
+                }
+                else
+                {
+                    do  {
+                        self.AppendArr = NSMutableArray()
+                        self.eventArray = NSMutableArray()
+                        self.AppendArr =  try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray as! NSMutableArray
+                        
+                        if self.AppendArr.count != 0 {
+                            
+                           // self.statusLbl.isHidden = true
+                            self.eventTblView.isHidden = false
+                            self.eventTblView.reloadData()
+                            
+                            
+                            for i in 0...self.AppendArr.count-1
+                            {
+                                if (self.AppendArr.object(at: i) as AnyObject).value(forKey: "lat") as! String == "" {
+                                } else {
+                                    print((self.AppendArr.object(at:i) as AnyObject).value(forKey: "type"),i)
+                                    self.eventArray.add(self.AppendArr[i])
+                                }
+                                
+                            }
+                            
+                            if self.eventArray.count != 0 {
+                                
+                                for index in 0..<self.eventArray.count {
+                                    
+                                    for index in 0..<self.eventArray.count {
+                                        let latData: String = (self.eventArray.object(at: index) as AnyObject).value(forKey: "lat") as! String
+                                        let lat : Double = Double(latData)!
+                                        let longData : String = (self.eventArray.object(at: index) as AnyObject).value(forKey: "lng") as! String
+                                        let long : Double = Double(longData)!
+                                        
+                                        self.annotation1.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                                       // print("lat",lat,long)
+                                        let aryIndex:String = String(format: "%d", index)
+                                      //  print("111",AnyIndex.self)
+                                        
+                                        let sikkim = CityLocation(coordinate: CLLocationCoordinate2D(latitude: lat, longitude:long), title: aryIndex)
+                                        
+                                        self.annotation1.title = "5666565"
+                                        self.latLongAry.add(sikkim)
+                                        
+                                    }
+                                    if self.latLongAry.count != 0
+                                    {
+                                        self.mapView.addAnnotations(self.latLongAry as![MKAnnotation])
+                                    }
+                                    else
+                                    {
+                                        
+                                    }
+                                }
+                                
+                                MBProgressHUD.hide(for: self.view, animated: true);
+                                print("Hello")
+                                self.loadingView.isHidden = true
+                                
+                                self.tabBarController?.tabBar.isHidden = false
+                            }
+                            
+                            else  {
+                                
+                                
+                            
+                               MBProgressHUD.hide(for: self.view, animated: true)
+                                self.loadingView.isHidden = true
+                                self.tabBarController?.tabBar.isHidden = false
+                            }
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            self.loadingView.isHidden = true
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                        }
+                        
+                        else  {
+                            self.eventTblView.isHidden = true
+                           // self.statusLbl.isHidden = false
+                            //  self.selectcardLbl.isHidden = true
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                            self.loadingView.isHidden = true
+                        }
+                        
+                    }
+                    catch
+                    {
+                        print("error")
+                    }
+                    
+                }
+
+            }
+        }
+        
+    }
+
+    
     //MARK: Google Place Picker Delegate Methods
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
         
@@ -501,7 +692,9 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
         }
         else
         {
-            fetch_nearby_event()
+           // fetch_nearby_event()
+            
+            fetch_events()
         }
      
         MBProgressHUD.hide(for: self.view, animated: true)
@@ -625,6 +818,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                                 if json == ""
                                 {
                                     MBProgressHUD.hide(for: self.view, animated: true);
+                                    self.loadingView.isHidden = true
                                     let alert = UIAlertController(title: "Loading...", message: "", preferredStyle: UIAlertController.Style.alert)
                                     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
                                         print("Action")
@@ -691,13 +885,13 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                                                 MBProgressHUD.hide(for: self.view, animated: true);
                                                 print("Hello")
                                                 
-                                                
+                                                self.loadingView.isHidden = true
                                                 
                                             }
                                             
                                             else  {
                                                 
-                                                
+                                                self.loadingView.isHidden = true
                                             
                                                MBProgressHUD.hide(for: self.view, animated: true)
                                             }
@@ -706,7 +900,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                                         }
                                         else
                                         {
-                                           
+                                            self.loadingView.isHidden = true
                                            MBProgressHUD.hide(for: self.view, animated: true)
                                         }
                                     
@@ -754,7 +948,7 @@ extension HomeVC:MKMapViewDelegate
             UserDefaults.standard.set(false, forKey: "eventdirection")
             if !(annotation is custompin) {
                     let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "userLocation")
-                annotationView.image = UIImage(named:"e")
+                annotationView.image = UIImage(named:"mapdot")
                             return annotationView
 
             }
@@ -803,14 +997,17 @@ extension HomeVC:MKMapViewDelegate
                     if (eventArray.object(at: i) as AnyObject).value(forKey: "provider_status") as! String == "Premium provider"
 
                     {
-                        annotationView.image = UIImage(named:"imp")
+                       // annotationView.image = UIImage(named:"imp")
+                        annotationView.image = UIImage(named:"mapdot")
+                       // mapdot
                     }
                     else
                     {
-                        annotationView.image = UIImage(named:"e")
+                       // annotationView.image = UIImage(named:"e")
+                        annotationView.image = UIImage(named:"mapdot")
                     }
 
-                    let titleval : String = (eventArray.object(at: i) as AnyObject).value(forKey: "vname") as! String
+                    let titleval : String = (eventArray.object(at: i) as AnyObject).value(forKey: "provider_name") as! String
                     //  annotationView.canShowCallout = true
                     annotationLabel.text = titleval
 
@@ -843,14 +1040,16 @@ extension HomeVC:MKMapViewDelegate
                     if (eventArray.object(at: i) as AnyObject).value(forKey: "provider_status") as! String == "Premium provider"
 
                     {
-                        annotationView.image = UIImage(named:"imp")
+                       // annotationView.image = UIImage(named:"imp")
+                        annotationView.image = UIImage(named:"mapdot")
                     }
                     else
                     {
-                        annotationView.image = UIImage(named:"e")
+                       // annotationView.image = UIImage(named:"e")
+                        annotationView.image = UIImage(named:"mapdot")
                     }
 
-                    let titleval : String = (eventArray.object(at: i) as AnyObject).value(forKey: "vname") as! String
+                    let titleval : String = (eventArray.object(at: i) as AnyObject).value(forKey: "provider_name") as! String
                     //  annotationView.canShowCallout = true
                     annotationLabel.text = titleval
 
@@ -873,72 +1072,236 @@ extension HomeVC:MKMapViewDelegate
 
             let i:Int = ((selectedAnnotation?.title) as! NSString).integerValue
 
-            let titleval : String = (eventArray.object(at: i) as AnyObject).value(forKey: "vname") as! String
+            let titleval : String = (eventArray.object(at: i) as AnyObject).value(forKey: "provider_name") as! String
             print("144",titleval)
 
 
-            eventnameLbl.text = (eventArray.object(at: i) as AnyObject).value(forKey: "vname")as! String
+            eventnameLbl.text = (eventArray.object(at: i) as AnyObject).value(forKey: "provider_name")as! String
 
             addressLbl.text = (eventArray.object(at: i) as AnyObject).value(forKey: "address")as! String
 
-            ratingView.rating = ((eventArray.object(at: i) as AnyObject).value(forKey: "avg_rating")as! NSString).doubleValue
+            ratingLbl.text = (eventArray.object(at: i) as AnyObject).value(forKey: "provider_avg_rating") as! String
 
 
-            let eimg:String = (eventArray.object(at: i) as AnyObject).value(forKey: "venue_img")as! String
-
-            if eimg == ""
-            {
-                self.eventImg.image = UIImage(named: "vdefault")
-
-            }
-            else
-            {
-                let url = URL(string: eimg)
-                let processor = DownsamplingImageProcessor(size: self.eventImg.bounds.size)
-                    |> RoundCornerImageProcessor(cornerRadius: 0)
-                self.eventImg.kf.indicatorType = .activity
-                self.eventImg.kf.setImage(
-                    with: url,
-                    placeholder: nil,
-                    options: [
-                        .processor(processor),
-                        .scaleFactor(UIScreen.main.scale),
-                        .transition(.fade(1)),
-                        .cacheOriginalImage
-                    ])
-                {
-                    result in
-                    switch result {
-                    case .success(let value):
-                        print("Task done for: \(value.source.url?.absoluteString ?? "")")
-                    case .failure(let error):
-                        print("Job failed: \(error.localizedDescription)")
-                        self.eventImg.image = UIImage(named: "vdefault")
-                    }
-                }
-
-            }
-            let vn = (eventArray.object(at: i) as AnyObject).value(forKey: "vname")as! String
+//            let eimg:String = (eventArray.object(at: i) as AnyObject).value(forKey: "venue_img")as! String
+//
+//            if eimg == ""
+//            {
+//                self.eventImg.image = UIImage(named: "vdefault")
+//
+//            }
+//            else
+//            {
+//                let url = URL(string: eimg)
+//                let processor = DownsamplingImageProcessor(size: self.eventImg.bounds.size)
+//                    |> RoundCornerImageProcessor(cornerRadius: 0)
+//                self.eventImg.kf.indicatorType = .activity
+//                self.eventImg.kf.setImage(
+//                    with: url,
+//                    placeholder: nil,
+//                    options: [
+//                        .processor(processor),
+//                        .scaleFactor(UIScreen.main.scale),
+//                        .transition(.fade(1)),
+//                        .cacheOriginalImage
+//                    ])
+//                {
+//                    result in
+//                    switch result {
+//                    case .success(let value):
+//                        print("Task done for: \(value.source.url?.absoluteString ?? "")")
+//                    case .failure(let error):
+//                        print("Job failed: \(error.localizedDescription)")
+//                        self.eventImg.image = UIImage(named: "vdefault")
+//                    }
+//                }
+//
+//            }
+            let vn = (eventArray.object(at: i) as AnyObject).value(forKey: "provider_name")as! String
             let add = (eventArray.object(at: i) as AnyObject).value(forKey: "address")as! String
-            let vi = (eventArray.object(at: i) as AnyObject).value(forKey: "venue_img")as! String
-            let id = (eventArray.object(at: i) as AnyObject).value(forKey: "venue_id")as! String
-            let c = (eventArray.object(at: i) as AnyObject).value(forKey: "contact")as! String
+           // let vi = (eventArray.object(at: i) as AnyObject).value(forKey: "venue_img")as! String
+            let id = (eventArray.object(at: i) as AnyObject).value(forKey: "provider_id")as! String
+          //  let c = (eventArray.object(at: i) as AnyObject).value(forKey: "contact")as! String
 
 
             UserDefaults.standard.setValue(vn, forKey: "V_name")
             UserDefaults.standard.setValue(add, forKey: "V_add")
-            UserDefaults.standard.setValue(vi, forKey: "V_image")
+           // UserDefaults.standard.setValue(vi, forKey: "V_image")
             UserDefaults.standard.setValue(id, forKey: "V_id")
-            UserDefaults.standard.setValue(c, forKey: "V_contact")
+          //  UserDefaults.standard.setValue(c, forKey: "V_contact")
             showView.isHidden = false
-
+            exploreGpsObj.isHidden = false
+            tabBarController?.tabBar.isHidden = true
         }
         else
         {
             print("1111")
         }
-
-
     }
 
 }
+extension HomeVC : UITableViewDelegate,UITableViewDataSource
+{
+    //MARK: tableView Methode
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    //      func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    //          self.viewWillLayoutSubviews()
+    //      }
+    //
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return AppendArr.count
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell =  eventTblView.dequeueReusableCell(withIdentifier: "HomeEventListTableViewCell", for: indexPath) as! HomeEventListTableViewCell
+        
+        
+        cell.eventNameLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
+        
+        
+   
+     //  DispatchQueue.main.async { [self] in
+       //     cell.eventListView.roundCorners(corners: [.topLeft, .topRight], radius: 10)
+//
+     //   }
+//
+        let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
+    
+    
+    
+        if eimg == ""
+        {
+            cell.eventimg.image = UIImage(named: "edefault")
+    
+        }
+        else
+        {
+            let url = URL(string: eimg)
+            let processor = DownsamplingImageProcessor(size: cell.eventimg.bounds.size)
+                |> RoundCornerImageProcessor(cornerRadius: 0)
+            cell.eventimg.kf.indicatorType = .activity
+            cell.eventimg.kf.setImage(
+                with: url,
+                placeholder: nil,
+                options: [
+                    .processor(processor),
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ])
+            {
+                result in
+                switch result {
+                case .success(let value):
+                    print("Task done for: \(value.source.url?.absoluteString ?? "")")
+                case .failure(let error):
+                    print("Job failed: \(error.localizedDescription)")
+                    cell.eventimg.image = UIImage(named: "edefault")
+                }
+            }
+    
+        }
+        
+//        eventImg.layer.masksToBounds = false
+//        eventImg.layer.shadowColor = UIColor.black.cgColor
+//        eventImg.layer.shadowOpacity = 0.50
+//        eventImg.layer.shadowRadius = 4
+//        eventImg.layer.cornerRadius = 0
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let pn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
+        let add = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "address")as! String
+        let od = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_date")as! String
+        let cd = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_date")as! String
+        let ot = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_time")as! String
+        let ct = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_time")as! String
+        let ai = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img") as! String
+        let en = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name") as! String
+        let aid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_id") as! String
+        let eid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_id") as! String
+        let tp = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "ticket_price") as! String
+
+        let lat = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "lat") as! String
+
+        let long = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "lng") as! String
+
+        let scn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "sub_cat_name")as! String
+
+        let n = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist")as! String
+
+        let cn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "category_name")as! String
+
+        let ai1 = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_id")as! String
+
+        let aimg = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_img")as! String
+        let ec = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_category")as! String
+        let pid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_id")as! String
+        let edesc = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_desc")as! String
+        let spr = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_avg_rating")as! String
+        if spr == ""
+        {
+            providerRating = "0" + "/5"
+        }
+        else
+        {
+            providerRating = spr + "/5"
+        }
+
+        let ar = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_avg_rating")as! String
+        if ar == ""
+        {
+            artistRating = "0" + "/5"
+        }
+        else
+        {
+            artistRating = ar + "/5"
+        }
+
+        UserDefaults.standard.setValue(scn, forKey: "Event_subcat")
+        UserDefaults.standard.setValue(n, forKey: "Event_name")
+        UserDefaults.standard.setValue(cn, forKey: "Event_cat")
+        UserDefaults.standard.setValue(ai1, forKey: "Event_artid")
+        UserDefaults.standard.setValue(aimg, forKey: "Event_artimg")
+        UserDefaults.standard.setValue(providerRating, forKey: "Event_providerrating")
+        UserDefaults.standard.setValue(artistRating, forKey: "Event_artrating")
+        UserDefaults.standard.setValue(pid, forKey: "V_id")
+
+        let f = od + " to " + cd + " timing " + ot + " to " + ct
+
+
+        UserDefaults.standard.setValue(od, forKey: "e_opend")
+        UserDefaults.standard.setValue(ot, forKey: "e_opent")
+        UserDefaults.standard.setValue(cd, forKey: "e_closed")
+        UserDefaults.standard.setValue(ct, forKey: "e_closet")
+
+        UserDefaults.standard.setValue(pn, forKey: "e_providername")
+        UserDefaults.standard.setValue(add, forKey: "e_provideradd")
+        UserDefaults.standard.setValue(f, forKey: "e_time")
+        UserDefaults.standard.setValue(ai, forKey: "e_profile")
+        UserDefaults.standard.setValue(en, forKey: "e_name")
+        UserDefaults.standard.setValue(aid, forKey: "Event_artid")
+        UserDefaults.standard.setValue(eid, forKey: "Event_id")
+        UserDefaults.standard.setValue(tp, forKey: "Event_ticketprice")
+        UserDefaults.standard.setValue(lat, forKey: "Event_lat")
+        UserDefaults.standard.setValue(long, forKey: "Event_long")
+        UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
+        UserDefaults.standard.setValue(edesc, forKey: "Event_desc")
+        
+
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewUpcomingEventDetailVC") as! NewUpcomingEventDetailVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+//        let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
+//        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//        self.present(alert, animated: true, completion: nil)
+    }
+}
+

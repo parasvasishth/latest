@@ -174,8 +174,8 @@ class ViewProposalVC: UIViewController {
         }
     }
 }
-extension UITextView {
-func leftSpace() {
-    self.textContainerInset = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
-}
-}
+//extension UITextView {
+//func leftSpace() {
+//    self.textContainerInset = UIEdgeInsets(top: 4, left: 10, bottom: 4, right: 10)
+//}
+//}

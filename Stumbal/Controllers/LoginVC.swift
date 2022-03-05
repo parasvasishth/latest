@@ -11,10 +11,25 @@ import GoogleSignIn
 import FBSDKLoginKit
 import FacebookCore
 import AuthenticationServices
+import SwiftUI
 //GIDSignInDelegate,GIDSignInUIDelegate
 
 //GIDSignInDelegate,GIDSignInUIDelegate,ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding
-class LoginVC: UIViewController,GIDSignInDelegate,ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding{
+class UnderlinedLabel: UILabel {
+
+override var text: String? {
+    didSet {
+        guard let text = text else { return }
+        let textRange = NSMakeRange(0, text.count)
+        let attributedText = NSMutableAttributedString(string: text)
+        attributedText.addAttribute(NSAttributedString.Key.underlineStyle , value: NSUnderlineStyle.single.rawValue, range: textRange)
+        // Add other attributes if needed
+        self.attributedText = attributedText
+        }
+    }
+}
+
+class LoginVC: UIViewController,GIDSignInDelegate{
 
 @IBOutlet var userNameFiled: UITextField!
 @IBOutlet var passwordField: UITextField!
@@ -22,7 +37,10 @@ class LoginVC: UIViewController,GIDSignInDelegate,ASAuthorizationControllerDeleg
 @IBOutlet var rememberObj: UIButton!
 @IBOutlet var scrollView: UIScrollView!
 @IBOutlet var hideimg: UIImageView!
-@IBOutlet var forgotLbl: UILabel!
+@IBOutlet var signuplbl: UnderlinedLabel!
+@IBOutlet var forgotlbl: UnderlinedLabel!
+@IBOutlet var loadingView: UIView!
+    
 var name:String = ""
 var email:String = ""
 var fbid:String = ""
@@ -35,53 +53,73 @@ var deviceId:String = ""
 var hud = MBProgressHUD()
 override func viewDidLoad() {
     super.viewDidLoad()
-    
+    loadingView.isHidden = false
+    forgotlbl.text = "Forgot Password?"
+   
     passwordField.isSecureTextEntry = true
-    userNameFiled.attributedPlaceholder =
-        NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-    passwordField.attributedPlaceholder =
-        NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+//    userNameFiled.attributedPlaceholder =
+//        NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+//    passwordField.attributedPlaceholder =
+//        NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+//
+    userNameFiled.setLeftPaddingPoints(15)
+    passwordField.setLeftPaddingPoints(15)
     
-    if UserDefaults.standard.value(forKey: "EMail") != nil{
-        rememberObj.setImage(UIImage(named: "rightc"), for: .normal)
-        
-        print("1444",UserDefaults.standard.value(forKey: "EMail") as! String)
-        
-        passwordField.text = UserDefaults.standard.value(forKey: "RememberPassword") as! String
-        
-        
-        userNameFiled.text = UserDefaults.standard.value(forKey: "EMail") as! String
-    }
-    else
-    {
-        userNameFiled.attributedPlaceholder =
-            NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-        passwordField.attributedPlaceholder =
-            NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-    }
+//    if UserDefaults.standard.value(forKey: "EMail") != nil{
+//        rememberObj.setImage(UIImage(named: "rightc"), for: .normal)
+//
+//        print("1444",UserDefaults.standard.value(forKey: "EMail") as! String)
+//
+//        passwordField.text = UserDefaults.standard.value(forKey: "RememberPassword") as! String
+//
+//
+//        userNameFiled.text = UserDefaults.standard.value(forKey: "EMail") as! String
+//    }
+//    else
+//    {
+//        userNameFiled.attributedPlaceholder =
+//            NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+//        passwordField.attributedPlaceholder =
+//            NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+//    }
     
-    self.termsLbl.isUserInteractionEnabled = true
-    let tapgesture = UITapGestureRecognizer(target: self, action: #selector(tappedOnLabel(_ :)))
-    tapgesture.numberOfTapsRequired = 1
-    self.termsLbl.addGestureRecognizer(tapgesture)
+//    self.termsLbl.isUserInteractionEnabled = true
+//    let tapgesture = UITapGestureRecognizer(target: self, action: #selector(tappedOnLabel(_ :)))
+//    tapgesture.numberOfTapsRequired = 1
+//    self.termsLbl.addGestureRecognizer(tapgesture)
     
-    let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(imageTapped1(tapGestureRecognizer:)))
-    hideimg.isUserInteractionEnabled = true
-    hideimg.addGestureRecognizer(tapGestureRecognizer1)
+//    let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(imageTapped1(tapGestureRecognizer:)))
+//    hideimg.isUserInteractionEnabled = true
+//    hideimg.addGestureRecognizer(tapGestureRecognizer1)
     
     let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(imageTapped3(tapGestureRecognizer:)))
-    forgotLbl.isUserInteractionEnabled = true
-    forgotLbl.addGestureRecognizer(tapGestureRecognizer3)
+    forgotlbl.isUserInteractionEnabled = true
+    forgotlbl.addGestureRecognizer(tapGestureRecognizer3)
+    
+    let tapGestureRecognizer4 = UITapGestureRecognizer(target: self, action: #selector(imageTapped4(tapGestureRecognizer:)))
+    signuplbl.isUserInteractionEnabled = true
+    signuplbl.addGestureRecognizer(tapGestureRecognizer4)
+    
+    signuplbl.text = "Create one now"
     
     new = true
-  
+    loadingView.isHidden = true
     
 }
+    
+    @objc func imageTapped4(tapGestureRecognizer: UITapGestureRecognizer){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SignUpVC") as! SignUpVC
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
+    }
+
 
 @objc func imageTapped3(tapGestureRecognizer: UITapGestureRecognizer){
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "SendEmailVC") as! SendEmailVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SendEmailVC") as! SendEmailVC
+    nextViewController.modalPresentationStyle = .fullScreen
+    self.present(nextViewController, animated:false, completion:nil)
     
 }
 
@@ -101,52 +139,52 @@ override func viewDidLoad() {
     
 }
 
-    @objc private func handleLogInWithAppleIDButtonPress() {
-
-      }
-
-      private func performExistingAccountSetupFlows() {
-          // Prepare requests for both Apple ID and password providers.
-          let requests = [ASAuthorizationAppleIDProvider().createRequest(), ASAuthorizationPasswordProvider().createRequest()]
-
-          // Create an authorization controller with the given requests.
-          let authorizationController = ASAuthorizationController(authorizationRequests: requests)
-          authorizationController.delegate = self
-          authorizationController.presentationContextProvider = self
-          authorizationController.performRequests()
-      }
-
-      func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-          //Handle error here
-      }
-
-      // ASAuthorizationControllerDelegate function for successful authorization
-      func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-          if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-              // Create an account in your system.
-              let userIdentifier = appleIDCredential.user
-              let userFirstName = appleIDCredential.fullName?.givenName
-              let userLastName = appleIDCredential.fullName?.familyName
-              let userEmail = appleIDCredential.email
-              print(userEmail)
-            print("152",userFirstName!,userLastName!,userIdentifier)
-            name = userFirstName! + userLastName!
-            email = userEmail!
-
-             fblogin()
-              //Navigate to other view controller
-          } else if let passwordCredential = authorization.credential as? ASPasswordCredential {
-              // Sign in using an existing iCloud Keychain credential.
-              let username = passwordCredential.user
-              let password = passwordCredential.password
-
-              //Navigate to other view controller
-          }
-      }
-
-      func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-          return self.view.window!
-      }
+//    @objc private func handleLogInWithAppleIDButtonPress() {
+//
+//      }
+//
+//      private func performExistingAccountSetupFlows() {
+//          // Prepare requests for both Apple ID and password providers.
+//          let requests = [ASAuthorizationAppleIDProvider().createRequest(), ASAuthorizationPasswordProvider().createRequest()]
+//
+//          // Create an authorization controller with the given requests.
+//          let authorizationController = ASAuthorizationController(authorizationRequests: requests)
+//          authorizationController.delegate = self
+//          authorizationController.presentationContextProvider = self
+//          authorizationController.performRequests()
+//      }
+//
+//      func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+//          //Handle error here
+//      }
+//
+//      // ASAuthorizationControllerDelegate function for successful authorization
+//      func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+//          if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+//              // Create an account in your system.
+//              let userIdentifier = appleIDCredential.user
+//              let userFirstName = appleIDCredential.fullName?.givenName
+//              let userLastName = appleIDCredential.fullName?.familyName
+//              let userEmail = appleIDCredential.email
+//              print(userEmail)
+//            print("152",userFirstName!,userLastName!,userIdentifier)
+//            name = userFirstName! + userLastName!
+//            email = userEmail!
+//
+//             fblogin()
+//              //Navigate to other view controller
+//          } else if let passwordCredential = authorization.credential as? ASPasswordCredential {
+//              // Sign in using an existing iCloud Keychain credential.
+//              let username = passwordCredential.user
+//              let password = passwordCredential.password
+//
+//              //Navigate to other view controller
+//          }
+//      }
+//
+//      func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+//          return self.view.window!
+//      }
 
 
 
@@ -246,7 +284,8 @@ func updateDeviceId()
                     
                     if  json["result"] as! String == "success"
                     {
-                        MBProgressHUD.hide(for: self.view, animated: true);
+                        //MBProgressHUD.hide(for: self.view, animated: true);
+                        self.loadingView.isHidden = true
                         let alert = UIAlertController(title: "", message: "Login Successful", preferredStyle: .alert)
                         self.present(alert, animated: true, completion: nil)
                         
@@ -462,6 +501,15 @@ func getdetail() {
         
     }
 }
+    // MARK: - Email Validation
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+
+    
 
 // MARK: - Action
 @IBAction func forgot(_ sender: UIButton) {
@@ -491,7 +539,17 @@ func getdetail() {
     
     if userNameFiled.text != "" && passwordField.text != ""
     {
-        login()
+        if isValidEmail(userNameFiled.text!)
+        {
+            login()
+        }
+        else
+        {
+            let alert = UIAlertController(title: "", message: "Invalid Email Id", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+      
     }
     else
     {
@@ -547,27 +605,21 @@ func getdetail() {
 }
 
 @IBAction func apple(_ sender: UIButton) {
-    let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
-    alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
-    self.present(alert, animated: false, completion: nil)
+//    let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
+//    alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
+//    self.present(alert, animated: false, completion: nil)
 
-        UserDefaults.standard.set(true, forKey: "applelogin")
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        authorizationController.delegate = self
-        authorizationController.presentationContextProvider = self
-        authorizationController.performRequests()
+//
+    
 }
 
 @IBAction func signup(_ sender: UIButton) {
     self.userNameFiled.text = ""
     self.passwordField.text = ""
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "SignUpVC") as! SignUpVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SignUpVC") as! SignUpVC
+    nextViewController.modalPresentationStyle = .fullScreen
+    self.present(nextViewController, animated:false, completion:nil)
 }
 
 
@@ -607,11 +659,12 @@ func getFBUserData(){
 // MARK: - login
 func login()
 {
-    
-    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-    hud.mode = MBProgressHUDMode.indeterminate
-    hud.self.bezelView.color = UIColor.black
-    hud.label.text = "Loading...."
+//
+//    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+//    hud.mode = MBProgressHUDMode.indeterminate
+//    hud.self.bezelView.color = UIColor.black
+//    hud.label.text = "Loading...."
+    loadingView.isHidden = false
     
     getdetail()
     
@@ -656,7 +709,7 @@ func login()
                     }
                     
                     else {
-                        
+                        self.loadingView.isHidden = true
                         MBProgressHUD.hide(for: self.view, animated: false)
                         let alert = UIAlertController(title: "", message: result, preferredStyle: UIAlertController.Style.alert)
                         alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
@@ -702,4 +755,260 @@ func didTapAttributedTextInLabel(label: UILabel, inRange targetRange: NSRange) -
     
     return NSLocationInRange(indexOfCharacter, targetRange)
 }
+}
+@IBDesignable
+public class GradientView: UILabel {
+    public override class var layerClass: AnyClass         { CAGradientLayer.self }
+    private var gradientLayer: CAGradientLayer             { layer as! CAGradientLayer }
+    
+    @IBInspectable public var startColor: UIColor = .white { didSet { updateColors1() } }
+    @IBInspectable public var endColor: UIColor = .red     { didSet { updateColors1() } }
+    
+    // expose startPoint and endPoint to IB
+    
+    @IBInspectable public var startPoint: CGPoint {
+        get { gradientLayer.startPoint }
+        set { gradientLayer.startPoint = newValue }
+    }
+    
+    @IBInspectable public var endPoint: CGPoint {
+        get { gradientLayer.endPoint }
+        set { gradientLayer.endPoint = newValue }
+    }
+    
+    // while we're at it, let's expose a few more layer properties so we can easily adjust them in IB
+    
+    @IBInspectable public var cornerRadius: CGFloat {
+        get { layer.cornerRadius }
+        set { layer.cornerRadius = newValue }
+    }
+    
+    @IBInspectable public var borderWidth: CGFloat {
+        get { layer.borderWidth }
+        set { layer.borderWidth = newValue }
+    }
+    
+    @IBInspectable public var borderColor: UIColor? {
+        get { layer.borderColor.flatMap { UIColor(cgColor: $0) } }
+        set { layer.borderColor = newValue?.cgColor }
+    }
+    
+    // init methods
+    
+    public override init(frame: CGRect = .zero) {
+        super.init(frame: frame)
+        updateColors1()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        updateColors1()
+    }
+    
+    
+    var cornerRadiusValue : CGFloat = 0
+       var corners : UIRectCorner = []
+
+      
+
+       @IBInspectable public var topLeft : Bool {
+           get {
+               return corners.contains(.topLeft)
+           }
+           set {
+               setCorner(newValue: newValue, for: .topLeft)
+           }
+       }
+
+       @IBInspectable public var topRight : Bool {
+           get {
+               return corners.contains(.topRight)
+           }
+           set {
+               setCorner(newValue: newValue, for: .topRight)
+           }
+       }
+
+       @IBInspectable public var bottomLeft : Bool {
+           get {
+               return corners.contains(.bottomLeft)
+           }
+           set {
+               setCorner(newValue: newValue, for: .bottomLeft)
+           }
+       }
+
+       @IBInspectable public var bottomRight : Bool {
+           get {
+               return corners.contains(.bottomRight)
+           }
+           set {
+               setCorner(newValue: newValue, for: .bottomRight)
+           }
+       }
+
+       func setCorner(newValue: Bool, for corner: UIRectCorner) {
+           if newValue {
+               addRectCorner(corner: corner)
+           } else {
+               removeRectCorner(corner: corner)
+           }
+       }
+
+       func addRectCorner(corner: UIRectCorner) {
+           corners.insert(corner)
+           updateCorners()
+       }
+
+       func removeRectCorner(corner: UIRectCorner) {
+           if corners.contains(corner) {
+               corners.remove(corner)
+               updateCorners()
+           }
+       }
+
+       func updateCorners() {
+           let path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: cornerRadiusValue, height: cornerRadiusValue))
+           let mask = CAShapeLayer()
+           mask.path = path.cgPath
+           self.layer.mask = mask
+       }
+    
+    
+    
+}
+
+private extension GradientView {
+    func updateColors1() {
+        gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
+    }
+}
+
+
+@IBDesignable
+public class GradientView1: UIView {
+    public override class var layerClass: AnyClass         { CAGradientLayer.self }
+    private var gradientLayer: CAGradientLayer             { layer as! CAGradientLayer }
+    
+    @IBInspectable public var startColor: UIColor = .white { didSet { updateColors2() } }
+    @IBInspectable public var endColor: UIColor = .red     { didSet { updateColors2() } }
+    
+    // expose startPoint and endPoint to IB
+    
+    @IBInspectable public var startPoint: CGPoint {
+        get { gradientLayer.startPoint }
+        set { gradientLayer.startPoint = newValue }
+    }
+    
+    @IBInspectable public var endPoint: CGPoint {
+        get { gradientLayer.endPoint }
+        set { gradientLayer.endPoint = newValue }
+    }
+    
+    // while we're at it, let's expose a few more layer properties so we can easily adjust them in IB
+    
+    @IBInspectable public var cornerRadius: CGFloat {
+        get { layer.cornerRadius }
+        set { layer.cornerRadius = newValue }
+    }
+    
+    @IBInspectable public var borderWidth: CGFloat {
+        get { layer.borderWidth }
+        set { layer.borderWidth = newValue }
+    }
+    
+    @IBInspectable public var borderColor: UIColor? {
+        get { layer.borderColor.flatMap { UIColor(cgColor: $0) } }
+        set { layer.borderColor = newValue?.cgColor }
+    }
+    
+    // init methods
+    
+    public override init(frame: CGRect = .zero) {
+        super.init(frame: frame)
+        updateColors2()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        updateColors2()
+    }
+    
+    
+    var cornerRadiusValue : CGFloat = 0
+       var corners : UIRectCorner = []
+
+      
+
+       @IBInspectable public var topLeft : Bool {
+           get {
+               return corners.contains(.topLeft)
+           }
+           set {
+               setCorner(newValue: newValue, for: .topLeft)
+           }
+       }
+
+       @IBInspectable public var topRight : Bool {
+           get {
+               return corners.contains(.topRight)
+           }
+           set {
+               setCorner(newValue: newValue, for: .topRight)
+           }
+       }
+
+       @IBInspectable public var bottomLeft : Bool {
+           get {
+               return corners.contains(.bottomLeft)
+           }
+           set {
+               setCorner(newValue: newValue, for: .bottomLeft)
+           }
+       }
+
+       @IBInspectable public var bottomRight : Bool {
+           get {
+               return corners.contains(.bottomRight)
+           }
+           set {
+               setCorner(newValue: newValue, for: .bottomRight)
+           }
+       }
+
+       func setCorner(newValue: Bool, for corner: UIRectCorner) {
+           if newValue {
+               addRectCorner(corner: corner)
+           } else {
+               removeRectCorner(corner: corner)
+           }
+       }
+
+       func addRectCorner(corner: UIRectCorner) {
+           corners.insert(corner)
+           updateCorners()
+       }
+
+       func removeRectCorner(corner: UIRectCorner) {
+           if corners.contains(corner) {
+               corners.remove(corner)
+               updateCorners()
+           }
+       }
+
+       func updateCorners() {
+           let path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: cornerRadiusValue, height: cornerRadiusValue))
+           let mask = CAShapeLayer()
+           mask.path = path.cgPath
+           self.layer.mask = mask
+       }
+    
+    
+    
+}
+
+private extension GradientView1 {
+    func updateColors2() {
+        gradientLayer.colors = [startColor.cgColor, endColor.cgColor]
+    }
 }

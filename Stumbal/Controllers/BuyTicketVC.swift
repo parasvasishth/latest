@@ -46,6 +46,9 @@ override func viewDidLoad() {
     ticketTblView.dataSource = self
     ticketTblView.delegate = self
     
+
+
+    
     let p = UserDefaults.standard.value(forKey: "Event_ticketprice") as! String
     let tpu2 =  Float(p)!.currencyUS
    
@@ -441,7 +444,11 @@ override func viewWillAppear(_ animated: Bool) {
 }
 
 @IBAction func payNow(_ sender: UIButton) {
+    
     //  buy_tickets()
+    
+    
+    
     if ticket_status == "Ticket Not Booked"
     {
         UserDefaults.standard.setValue(status, forKey: "eventprivacy")

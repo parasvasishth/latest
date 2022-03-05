@@ -455,7 +455,7 @@ func collectionView(_ collectionView: UICollectionView, willDisplay cell: UIColl
 func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     
     guard let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: "titleCell",
-                                                                for: indexPath) as? RoundedCollectionViewCell else {
+                                                                for: indexPath) as? RoundedCollectionViewCell else{
         return RoundedCollectionViewCell()
     }
     

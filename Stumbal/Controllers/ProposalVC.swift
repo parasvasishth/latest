@@ -313,6 +313,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     
     return cell
 }
+    
 func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let pn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
     let d = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "post_detail")as! String

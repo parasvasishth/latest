@@ -18,13 +18,16 @@ var hud = MBProgressHUD()
 var cardParams = STPCardParams()
 var responseArray : NSArray = NSArray()
 let paymentTextField = STPPaymentCardTextField()
-var cardId:String = ""
+    @IBOutlet weak var loadingView: UIView!
+    var cardId:String = ""
 override func viewDidLoad() {
     super.viewDidLoad()
     paymentTextField.isHidden = false
     paymentTextField.postalCodeEntryEnabled = false
     nameFiled.setLeftPaddingPoints(10)
     
+    nameFiled.attributedPlaceholder =
+        NSAttributedString(string: "Card Holder Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
     // Do any additional setup after loading the view.
     createCardTextField()
     // Do any additional setup after loading the view.
@@ -159,7 +162,7 @@ func buy_tickets()
     hud.mode = MBProgressHUDMode.indeterminate
     hud.self.bezelView.color = UIColor.black
     hud.label.text = "Loading...."
-    Alamofire.request("https://stumbal.com/process.php?action=buy_tickets", method: .post, parameters: ["user_id" : UserDefaults.standard.value(forKey: "u_Id") as! String,"event_id":UserDefaults.standard.value(forKey: "Event_id") as! String,"price":UserDefaults.standard.value(forKey: "Event_ticketprice") as! String, "card_id":cardId,"type":UserDefaults.standard.value(forKey: "eventprivacy") as! String,"payment_type":"Paypal"], encoding:  URLEncoding.httpBody).responseJSON
+    Alamofire.request("https://stumbal.com/process.php?action=buy_tickets", method: .post, parameters: ["user_id" : UserDefaults.standard.value(forKey: "u_Id") as! String,"event_id":UserDefaults.standard.value(forKey: "Event_id") as! String,"price":UserDefaults.standard.value(forKey: "Event_ticketprice") as! String, "card_id":cardId,"type":UserDefaults.standard.value(forKey: "eventprivacy") as! String,"payment_type":"Paypal","quantity":UserDefaults.standard.value(forKey: "qty") as! String], encoding:  URLEncoding.httpBody).responseJSON
     { response in
         if let data = response.data
         {

@@ -22,6 +22,8 @@ class EventTblCell: UITableViewCell {
     @IBOutlet var qrtopHeight: NSLayoutConstraint!
     @IBOutlet var qrstackObj: UIStackView!
     @IBOutlet var refundObj: UIButton!
+    @IBOutlet weak var imgView: UIView!
+    @IBOutlet weak var newImg: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -13,9 +13,26 @@ class SendDetailVC: UIViewController {
     @IBOutlet var bsbField: UITextField!
     @IBOutlet var accountNumberField: UITextField!
     @IBOutlet var paypalFiedl: UITextField!
+    @IBOutlet weak var loadingView: UIView!
     var hud = MBProgressHUD()
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+            banknameField.attributedPlaceholder =
+                NSAttributedString(string: "Bank Account Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        bsbField.attributedPlaceholder =
+            NSAttributedString(string: "BSB", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
+        accountNumberField.attributedPlaceholder =
+            NSAttributedString(string: "Account Number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
+        paypalFiedl.attributedPlaceholder =
+            NSAttributedString(string: "PayPal ID", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        
+        banknameField.setLeftPaddingPoints(10)
+        bsbField.setLeftPaddingPoints(10)
+        accountNumberField.setLeftPaddingPoints(10)
+        paypalFiedl.setLeftPaddingPoints(10)
             fetch_artist_detail()
         // Do any additional setup after loading the view.
     }

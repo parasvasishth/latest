@@ -13,19 +13,26 @@ class SendOtpVC: UIViewController {
     @IBOutlet var otpFiled: UITextField!
     @IBOutlet var resendobj: UIButton!
     @IBOutlet var verifyObj: UIButton!
+    @IBOutlet weak var loadingView: UIView!
     var hud = MBProgressHUD()
     override func viewDidLoad() {
         super.viewDidLoad()
-        resendobj.layer.cornerRadius = 8;
-        resendobj.clipsToBounds = true
-        verifyObj.layer.cornerRadius = 8;
-        verifyObj.clipsToBounds = true
-        emaillbl.text = UserDefaults.standard.value(forKey: "Email") as! String
+//        resendobj.layer.cornerRadius = 8;
+//        resendobj.clipsToBounds = true
+//        verifyObj.layer.cornerRadius = 8;
+//        verifyObj.clipsToBounds = true
+        loadingView.isHidden = false
+        otpFiled.attributedPlaceholder =
+            NSAttributedString(string: "Enter Code", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.4823529412, green: 0.4823529412, blue: 0.4823529412, alpha: 1)])
+        // Do any additional setup after loading the view.
+        otpFiled.setLeftPaddingPoints(15)
+        loadingView.isHidden = true
+       // emaillbl.text = UserDefaults.standard.value(forKey: "Email") as! String
         // Do any additional setup after loading the view.
     }
     
     @IBAction func resend(_ sender: UIButton) {
-        
+
         send_Otp()
     }
     
@@ -33,6 +40,7 @@ class SendOtpVC: UIViewController {
         var otp = UserDefaults.standard.value(forKey: "OTP") as! String
         if otpFiled.text == otp
         {
+        
             var passwordCon=self.storyboard?.instantiateViewController(withIdentifier: "PasswordChangeVC") as! PasswordChangeVC
             passwordCon.modalPresentationStyle = .fullScreen
             self.present(passwordCon, animated: true, completion: nil)

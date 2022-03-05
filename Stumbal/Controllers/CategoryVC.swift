@@ -64,10 +64,10 @@ override func viewWillLayoutSubviews() {
     UserDefaults.standard.removeObject(forKey: "S_dob")
     UserDefaults.standard.removeObject(forKey: "S_mobile")
     UserDefaults.standard.removeObject(forKey: "S_gender")
-    
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginVC") as! LoginVC
+    nextViewController.modalPresentationStyle = .fullScreen
+    self.present(nextViewController, animated:false, completion:nil)
 }
 
 @IBAction func back(_ sender: UIButton) {
@@ -221,9 +221,7 @@ func registration()
                             self.present(signuCon, animated: false, completion:nil)
                             
                         }
-                        
-                        
-                        
+                   
                     }
                     
                     else {

@@ -16,12 +16,12 @@ class ArtistRegisterVC: UIViewController,UIImagePickerControllerDelegate,UINavig
 @IBOutlet var subCategoryFiled: UITextField!
 @IBOutlet var otheruserLbl: UILabel!
 @IBOutlet var otherHeight: NSLayoutConstraint!
-    @IBOutlet var categoryCollectionView: UICollectionView!
-    @IBOutlet var blackView: UIView!
-    @IBOutlet var artsitTbleView: UITableView!
-    @IBOutlet var profileView: UIView!
-    @IBOutlet var tblHeight: NSLayoutConstraint!
-    var pickerOne : UIImagePickerController?
+@IBOutlet var categoryCollectionView: UICollectionView!
+@IBOutlet var blackView: UIView!
+@IBOutlet var artsitTbleView: UITableView!
+@IBOutlet var profileView: UIView!
+@IBOutlet var tblHeight: NSLayoutConstraint!
+var pickerOne : UIImagePickerController?
 var imgName:String = ""
 var str1:String = ""
 var categoryArray:NSArray = NSArray()
@@ -37,19 +37,17 @@ var myPicker2Data2 = [String]()
 var hud = MBProgressHUD()
 var cat_ID:String = ""
 var subCat_ID:String = ""
-    var otherartistArray:[String] = []
-    var IdArr = NSMutableArray()
-    var servicenameArr = [[String: String]]()
-    var artistArray:NSMutableArray = NSMutableArray()
-    var string1:String = ""
+var otherartistArray:[String] = []
+var IdArr = NSMutableArray()
+var servicenameArr = [[String: String]]()
+var artistArray:NSMutableArray = NSMutableArray()
+var string1:String = ""
 override func viewDidLoad() {
     super.viewDidLoad()
     UserDefaults.standard.removeObject(forKey: "userarray")
-   
     nameLbl.setLeftPaddingPoints(10)
     nameLbl.attributedPlaceholder =
         NSAttributedString(string: "Enter Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-   
     nameLbl.setLeftPaddingPoints(15)
 
     artsitTbleView.dataSource = self
@@ -57,13 +55,9 @@ override func viewDidLoad() {
     categoryCollectionView.dataSource = self
     categoryCollectionView.delegate = self
     //tblHeight.constant = 0
-    
     fetch_metatags()
-    
-  
     DispatchQueue.main.async { [self] in
-       
-        profileView.roundCorners(corners: [.topLeft, .topRight], radius: 8.0)
+       profileView.roundCorners(corners: [.topLeft, .topRight], radius: 8.0)
     }
     
     let layout = UICollectionViewCenterLayout()
@@ -71,23 +65,21 @@ override func viewDidLoad() {
     categoryCollectionView.collectionViewLayout = layout
     // Do any additional setup after loading the view.
 }
-override func viewWillAppear(_ animated: Bool) {
     
+override func viewWillAppear(_ animated: Bool) {
     if UserDefaults.standard.value(forKey: "userarray") == nil
     {
         tblHeight.constant = 0
-    
     }
     else
     {
         servicenameArr = UserDefaults.standard.value(forKey: "userarray") as! [[String: String]]
         print("11",servicenameArr)
         tblHeight.constant = 400
-       artistArray = NSMutableArray(array:servicenameArr)
+        artistArray = NSMutableArray(array:servicenameArr)
         artsitTbleView.isHidden = false
         artsitTbleView.reloadData()
     }
-
 }
 
     @IBAction func deleteUser(_ sender: UIButton) {
@@ -247,12 +239,11 @@ func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMe
 func ConvertImageToBase64String (img: UIImage) -> String {
     return img.jpegData(compressionQuality: 0.75)?.base64EncodedString() ?? ""
 }
-
-
     func json(from object: [[String:Any]]) throws -> String {
         let data = try JSONSerialization.data(withJSONObject: object)
         return String(data: data, encoding: .utf8)!
     }
+    
 //MARK: artist_register ;
 func artist_register()
 {
@@ -278,8 +269,6 @@ func artist_register()
     {
         
     }
-    
-
     
     Alamofire.request("https://stumbal.com/process.php?action=artist_register", method: .post, parameters: ["user_id":uID,"artist_image":imgName,"artist_image_string":str1,"name":nameLbl.text!,"category_id":finalcat,"sub_cat_id":"","other_user":string1], encoding:  URLEncoding.httpBody).responseJSON
     { response in
@@ -324,14 +313,12 @@ func artist_register()
     }
     
 }
+   
 
 //MARK: fetch_metatags ;
-
     func fetch_metatags()
     {
-        // UserDefaults.standard.set(self.userId, forKey: "User id")
-        
-        
+      
             hud = MBProgressHUD.showAdded(to: self.view, animated: true)
             hud.mode = MBProgressHUDMode.indeterminate
             hud.self.bezelView.color = UIColor.black
@@ -386,11 +373,6 @@ func artist_register()
         }
     }
 
-
-
-
-
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return  categoryArray.count
     }
@@ -402,40 +384,14 @@ func artist_register()
         
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    //    let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCollectionViewCell", for: indexPath) as! CategoryCollectionViewCell
-    //    cell.LeftAlignedCollectionViewFlowLayout()
-    //    cell.categoryNameLbl.heightAnchor = 50
+
         
         guard let cell = categoryCollectionView.dequeueReusableCell(withReuseIdentifier: "titleCell",
                                                             for: indexPath) as? RoundedCollectionViewCell else {
                                                                 return RoundedCollectionViewCell()
         }
         
-        
-    //    cell.categoryNameLbl.layer.cornerRadius = 25;
-    //    cell.categoryNameLbl.clipsToBounds = true
-    //
-        
-        
-        
-        
-    //    let n = (categoryArray.object(at: indexPath.row) as AnyObject).value(forKey: "category_name")as! String
-    //
-    //    //        let menuData=categoryArray[indexPath.row]
-    //    //
-    //    cell.categoryNameLbl.text = "    \(n)    "
-    //
-    //
-    //    if arrSelectedIndex.contains(indexPath) { // You need to check wether selected index array contain current index if yes then change the color
-    //        cell.categoryNameLbl.backgroundColor = #colorLiteral(red: 0.431372549, green: 0.168627451, blue: 0.6823529412, alpha: 1)
-    //    }
-    //    else {
-    //        cell.categoryNameLbl.backgroundColor = UIColor.darkGray
-    //    }
-        
-        
-        
-        
+  
         let n = (categoryArray.object(at: indexPath.row) as AnyObject).value(forKey: "category_name")as! String
          
          let id = (categoryArray.object(at: indexPath.row) as AnyObject).value(forKey: "category_id")as! String
@@ -459,40 +415,14 @@ func artist_register()
          {
             UserDefaults.standard.set(false, forKey: String(format: "Selected%d", indexPath.row))
          }
-        
-        
-        
-        
-        
-        cell.textLabel.text = n
       
-         //cell.layoutSubviews()
-         return cell
-        
-        
-        
-      //  cell.layoutSubviews()
-        
-        
-        
-        //return cell
+        cell.textLabel.text = n
+               return cell
+  
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    //    print("You selected cell #\(indexPath.item)!")
-    //
-    //    let strData = (categoryArray.object(at: indexPath.row) as AnyObject).value(forKey: "category_id")as! String
-    //
-    //    if arrSelectedIndex.contains(indexPath) {
-    //        arrSelectedIndex = arrSelectedIndex.filter { $0 != indexPath}
-    //        arrSelectedData = arrSelectedData.filter { $0 != strData}
-    //    }
-    //    else {
-    //        arrSelectedIndex.append(indexPath)
-    //        arrSelectedData.append(strData)
-    //    }
-    //
-    //    fetch_metatags()
-    //
+    
         
         let selectedCell:RoundedCollectionViewCell = categoryCollectionView.cellForItem(at: indexPath)! as! RoundedCollectionViewCell
         let id = (categoryArray.object(at: indexPath.row) as AnyObject).value(forKey: "category_id")as! String
@@ -523,14 +453,10 @@ func artist_register()
                     {
                         
                     }
-                    
-                   
-                   
+            
                 }
         
     }
-    
-
     
 
     //MARK:  TableView Method
@@ -550,17 +476,6 @@ func artist_register()
           func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
               let cell = artsitTbleView.dequeueReusableCell(withIdentifier: "SearchArtistTblCell", for: indexPath) as! SearchArtistTblCell
               
-    
-        
-             
-           
-//            cell.profileImg?.sd_setImage(with: URL(string: (self.artistArray[indexPath.row] as AnyObject).value(forKey:"artist_img") as! String)) { (image, error, cache, urls) in
-//                        if (error != nil) {
-//                            cell.profileImg.image = UIImage(named: "adefault")
-//                        } else {
-//                            cell.profileImg.image = image
-//                        }
-//            }
             
             let eimg:String = (artistArray.object(at: indexPath.row) as AnyObject).value(forKey: "artist_img")as! String
             
@@ -598,15 +513,12 @@ func artist_register()
                
             }
             
-            
             cell.artistNameLbl.text! = (artistArray.object(at: indexPath.row) as AnyObject).value(forKey: "name")as! String
             cell.artistIdLbl.text! = (artistArray.object(at: indexPath.row) as AnyObject).value(forKey: "stumbal_id")as! String
  
            cell.addObj.tag = indexPath.row
               return cell
           }
-
-        
     }
     
     

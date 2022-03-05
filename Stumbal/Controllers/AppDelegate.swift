@@ -120,6 +120,8 @@ func application(_ application: UIApplication, didReceiveRemoteNotification user
     completionHandler(UIBackgroundFetchResult.newData)
 }
 
+    
+    
 func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
           withError error: Error!) {
     if let error = error {

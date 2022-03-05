@@ -80,7 +80,6 @@ override func viewDidLoad() {
     UserDefaults.standard.setValue(servicenameArr, forKey: "userarray")
     self.dismiss(animated: false, completion: nil)
     
-    
 }
 
 

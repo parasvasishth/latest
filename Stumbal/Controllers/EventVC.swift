@@ -10,30 +10,44 @@ import Alamofire
 import SDWebImage
 import Kingfisher
 import CoreLocation
-class EventVC: UIViewController,UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate {
+class EventVC: UIViewController,UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate,UISearchBarDelegate {
 
 @IBOutlet var menu: UIButton!
 @IBOutlet var statusLbl: UILabel!
 @IBOutlet var eventTblView: UITableView!
 @IBOutlet var mapImg: UIImageView!
-var AppendArr:NSMutableArray = NSMutableArray()
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var loadingView: UIView!
+    var AppendArr:NSMutableArray = NSMutableArray()
 var hud = MBProgressHUD()
 var locationManager = CLLocationManager()
 var lat:Float = 0
 var long:Float = 0
 var distance:String = ""
+    var catstring:String = ""
 override func viewDidLoad() {
     super.viewDidLoad()
-    eventTblView.dataSource = self
-    eventTblView.delegate = self
   
-    menu.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
+   // menu.addTarget(revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
     
-    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-    mapImg.isUserInteractionEnabled = true
-    mapImg.addGestureRecognizer(tapGestureRecognizer)
+//    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+//    mapImg.isUserInteractionEnabled = true
+//    mapImg.addGestureRecognizer(tapGestureRecognizer)
     // Do any additional setup after loading the view.
+    tabBarController?.tabBar.isHidden = true
+    loadingView.isHidden = false
 }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        top_events_cat()
+        
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        
+        //backObj.isHidden = false
+    }
+
+    
 // MARK: - cart Method
 @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer){
     
@@ -45,13 +59,47 @@ override func viewDidLoad() {
 }
 
 override func viewWillAppear(_ animated: Bool) {
+    tabBarController?.tabBar.isHidden = true
+    loadingView.isHidden = false
+    
+    eventTblView.dataSource = self
+    eventTblView.delegate = self
+ //   searchBar.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+
+    let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+    textFieldInsideSearchBar?.textColor = UIColor.white
+    
+    UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).leftViewMode = .never
+    searchBar.delegate = self
+    if #available(iOS 13.0, *) {
+        searchBar.searchTextField.backgroundColor = #colorLiteral(red: 0.1098039216, green: 0.1098039216, blue: 0.1098039216, alpha: 1)
+       } else {
+           // Fallback on earlier versions
+       }
     if self.revealViewController() != nil {
         
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
     }
-    UserDefaults.standard.set(true, forKey: "upcoming_event")
-    fetch_user_distance()
+   // UserDefaults.standard.set(true, forKey: "upcoming_event")
+  //  fetch_user_distance()
+    
+    if let textfield = searchBar.value(forKey: "searchField") as? UITextField {
+
+        //textfield.backgroundColor = UIColor.yellow
+        textfield.attributedPlaceholder = NSAttributedString(string: textfield.placeholder ?? "Search bar", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
+        textfield.setLeftPaddingPoints(5)
+        textfield.clearButtonMode = .never
+       // textfield.textColor = UIColor.green
+
+//        if let leftView = textfield.leftView as? UIImageView {
+//            leftView.image = leftView.image?.withRenderingMode(.alwaysTemplate)
+//            leftView.tintColor = UIColor.red
+//        }
+    }
+    
+    fecth_Profile()
+    
 }
 
 // https://www.stumbal.zithera.com.au/Stumbal/process.php?action=fetch_events
@@ -137,6 +185,127 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
     self.fetch_events()
     locationManager.stopUpdatingLocation()
 }
+    
+    //MARK: top_events_cat ;
+    func top_events_cat()
+    {
+        // UserDefaults.standard.set(self.userId, forKey: "User id")
+        //    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        //    hud.mode = MBProgressHUDMode.indeterminate
+        //    hud.self.bezelView.color = UIColor.black
+        //    hud.label.text = "Loading...."
+    
+        print("11",catstring)
+      //  loadingView.isHidden = true
+        Alamofire.request("https://stumbal.com/process.php?action=top_events_cat_multiple", method: .post, parameters: ["cat_id" :catstring,"search":searchBar.text!], encoding:  URLEncoding.httpBody).responseJSON { response in
+            if let data = response.data {
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print("=====1======")
+                print("Response: \(String(describing: json))")
+                
+                if json == ""
+                {
+                    MBProgressHUD.hide(for: self.view, animated: true);
+                    let alert = UIAlertController(title: "Loading...", message: "", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
+                        print("Action")
+                        self.top_events_cat()
+                    }))
+                    self.present(alert, animated: false, completion: nil)
+                    
+                }
+                else
+                {
+                    do  {
+                        self.AppendArr = NSMutableArray()
+                        self.AppendArr =  try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray as! NSMutableArray
+                        
+                        if self.AppendArr.count != 0 {
+                            
+                            self.statusLbl.isHidden = true
+                            self.eventTblView.isHidden = false
+                            self.eventTblView.reloadData()
+                            self.loadingView.isHidden = true
+                            self.tabBarController?.tabBar.isHidden = false
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                        }
+                        
+                        else  {
+                            self.eventTblView.isHidden = true
+                            self.statusLbl.isHidden = false
+                            self.loadingView.isHidden = true
+                            //  self.selectcardLbl.isHidden = true
+                            self.tabBarController?.tabBar.isHidden = false
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                        }
+                        
+                    }
+                    catch
+                    {
+                        print("error")
+                    }
+                    
+                }
+
+            }
+        }
+        
+    }
+    
+    // MARK: - fecth_Profile
+    func fecth_Profile()
+    {
+
+    //hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+    //hud.mode = MBProgressHUDMode.indeterminate
+    //hud.self.bezelView.color = UIColor.black
+    //hud.label.text = "Loading...."
+        self.loadingView.isHidden = false
+    Alamofire.request("https://stumbal.com/process.php?action=fetch_user_profile", method: .post, parameters: ["user_id" : UserDefaults.standard.value(forKey: "u_Id") as! String], encoding:  URLEncoding.httpBody).responseJSON
+    { response in
+        if let data = response.data
+        {
+            let json = String(data: data, encoding: String.Encoding.utf8)
+            
+            print("Response: \(String(describing: json))")
+            if json == ""
+            {
+                MBProgressHUD.hide(for: self.view, animated: true);
+                let alert = UIAlertController(title: "Loading...", message: "", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
+                    print("Action")
+                    self.fecth_Profile()
+                }))
+                self.present(alert, animated: false, completion: nil)
+                
+                
+            }
+            else
+            {
+                
+                
+                if let json: NSDictionary = response.result.value as? NSDictionary
+                
+                {
+                    
+                    self.catstring = json["category_id"] as! String
+                    
+                    self.top_events_cat()
+                    
+                }
+                else
+                {
+                   self.loadingView.isHidden = true
+
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                }
+            }
+        }
+    }
+
+    }
+
+    
 // MARK: - fetch_user_distance
 func fetch_user_distance()
 {
@@ -281,8 +450,17 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     let cell =  eventTblView.dequeueReusableCell(withIdentifier: "EventTblCell", for: indexPath) as! EventTblCell
     
     
-    cell.eventNamelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
+  
     
+   
+    cell.eventNamelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
+    cell.imgView.roundCorners(corners: [.topLeft, .topRight], radius: 10.0)
+    
+    cell.eventNamelbl.layer.masksToBounds = false
+    cell.eventNamelbl.layer.shadowColor = #colorLiteral(red: 0.1058823529, green: 0.003921568627, blue: 0.1529411765, alpha: 1)
+    cell.eventNamelbl.layer.shadowOpacity = 0.50
+    cell.eventNamelbl.layer.shadowRadius = 4
+    cell.eventNamelbl.layer.cornerRadius = 2
     
 //    if case let cell.eventNamelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
 //    {
@@ -291,45 +469,47 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
 //
 //    }
     
-    cell.vendorNameLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
-    cell.eventAddressLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "address")as! String
-    cell.categorylbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_category")as! String
-//    let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
-//    
-//    
-//    
-//    if eimg == ""
-//    {
-//        cell.eventImg.image = UIImage(named: "edefault")
-//        
-//    }
-//    else
-//    {
-//        let url = URL(string: eimg)
-//        let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
-//            |> RoundCornerImageProcessor(cornerRadius: 0)
-//        cell.eventImg.kf.indicatorType = .activity
-//        cell.eventImg.kf.setImage(
-//            with: url,
-//            placeholder: nil,
-//            options: [
-//                .processor(processor),
-//                .scaleFactor(UIScreen.main.scale),
-//                .transition(.fade(1)),
-//                .cacheOriginalImage
-//            ])
-//        {
-//            result in
-//            switch result {
-//            case .success(let value):
-//                print("Task done for: \(value.source.url?.absoluteString ?? "")")
-//            case .failure(let error):
-//                print("Job failed: \(error.localizedDescription)")
-//                cell.eventImg.image = UIImage(named: "edefault")
-//            }
-//        }
-//        
-//    }
+  //  cell.vendorNameLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
+   // cell.eventAddressLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "address")as! String
+    //cell.categorylbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_category")as! String
+    let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
+    
+    
+    
+    if eimg == ""
+    {
+        cell.eventImg.image = UIImage(named: "edefault")
+        cell.newImg.isHidden = false
+    }
+    else
+    {
+        let url = URL(string: eimg)
+        let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
+            |> RoundCornerImageProcessor(cornerRadius: 0)
+        cell.eventImg.kf.indicatorType = .activity
+        cell.eventImg.kf.setImage(
+            with: url,
+            placeholder: nil,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ])
+        {
+            result in
+            switch result {
+            case .success(let value):
+                print("Task done for: \(value.source.url?.absoluteString ?? "")")
+                cell.newImg.isHidden = false
+            case .failure(let error):
+                print("Job failed: \(error.localizedDescription)")
+                cell.eventImg.image = UIImage(named: "edefault")
+                cell.newImg.isHidden = false
+            }
+        }
+        
+    }
     
     let od = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_date")as! String
     let cd = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_date")as! String
@@ -358,24 +538,26 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let aid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_id") as! String
     let eid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_id") as! String
     let tp = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "ticket_price") as! String
-    
+
     let lat = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "lat") as! String
-    
+
     let long = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "lng") as! String
-    
+
     let scn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "sub_cat_name")as! String
-    
+
     let n = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist")as! String
-    
+
     let cn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "category_name")as! String
-    
+
     let ai1 = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_id")as! String
-    
+
     let aimg = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_img")as! String
     let ec = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_category")as! String
     let pid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_id")as! String
-    
+
     let spr = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_avg_rating")as! String
+    
+    let edesc = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_desc")as! String
     if spr == ""
     {
         providerRating = "0" + "/5"
@@ -384,7 +566,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     {
         providerRating = spr + "/5"
     }
-    
+
     let ar = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_avg_rating")as! String
     if ar == ""
     {
@@ -394,7 +576,7 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     {
         artistRating = ar + "/5"
     }
-    
+
     UserDefaults.standard.setValue(scn, forKey: "Event_subcat")
     UserDefaults.standard.setValue(n, forKey: "Event_name")
     UserDefaults.standard.setValue(cn, forKey: "Event_cat")
@@ -403,15 +585,15 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     UserDefaults.standard.setValue(providerRating, forKey: "Event_providerrating")
     UserDefaults.standard.setValue(artistRating, forKey: "Event_artrating")
     UserDefaults.standard.setValue(pid, forKey: "V_id")
-    
+
     let f = od + " to " + cd + " timing " + ot + " to " + ct
-    
-    
+
+
     UserDefaults.standard.setValue(od, forKey: "e_opend")
     UserDefaults.standard.setValue(ot, forKey: "e_opent")
     UserDefaults.standard.setValue(cd, forKey: "e_closed")
     UserDefaults.standard.setValue(ct, forKey: "e_closet")
-    
+
     UserDefaults.standard.setValue(pn, forKey: "e_providername")
     UserDefaults.standard.setValue(add, forKey: "e_provideradd")
     UserDefaults.standard.setValue(f, forKey: "e_time")
@@ -423,10 +605,14 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     UserDefaults.standard.setValue(lat, forKey: "Event_lat")
     UserDefaults.standard.setValue(long, forKey: "Event_long")
     UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
-    
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+    UserDefaults.standard.setValue(edesc, forKey: "Event_desc")
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewUpcomingEventDetailVC") as! NewUpcomingEventDetailVC
+    nextViewController.modalPresentationStyle = .fullScreen
+    self.present(nextViewController, animated:false, completion:nil)
+//    let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
+//    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+//    self.present(alert, animated: true, completion: nil)
 }
 
 

@@ -68,8 +68,6 @@ class FriendsVC: UIViewController,UITableViewDataSource,UITableViewDelegate,UISe
         let img = (self.messageArray.object(at: tagVal) as AnyObject).value(forKey: "email")as! String
         let rid = (self.messageArray.object(at: tagVal) as AnyObject).value(forKey: "user_id")as! String
         
-        
-        
         self.dict.setValue(n, forKey: "name")
         self.dict.setValue(id, forKey: "user_img")
         self.dict.setValue(img, forKey: "email")

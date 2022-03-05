@@ -20,8 +20,9 @@ target 'Stumbal' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Messaging'
   pod 'SDWebImage', '~> 4.0'
-  pod 'Kingfisher', '~> 6.0'
+  pod 'Kingfisher', '~> 7.0'
   pod 'Firebase/Crashlytics'
+  
   target 'StumbalTests' do
     inherit! :search_paths
     # Pods for testing

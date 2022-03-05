@@ -9,9 +9,20 @@ import UIKit
 
 class NewViewController: UIViewController {
 
+    @IBOutlet weak var firstView: UIView!
+    @IBOutlet weak var firstViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var secondView: UIView!
+    @IBOutlet weak var secondViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var upcomingHeight: NSLayoutConstraint!
+    @IBOutlet weak var thirdView: UIView!
+    @IBOutlet weak var thirdViewHeight: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        firstViewHeight.constant = 0
+        secondViewHeight.constant = 0
+        thirdViewHeight.constant = 0
+        upcomingHeight.constant = 0
         // Do any additional setup after loading the view.
     }
     

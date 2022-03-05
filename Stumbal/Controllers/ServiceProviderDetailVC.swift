@@ -86,7 +86,6 @@ class ServiceProviderDetailVC: UIViewController,UITableViewDataSource,UITableVie
                       UIApplication.shared.openURL(url as URL)
                   }
               }
-        
       }
     
     @IBAction func timing(_ sender: UIButton) {

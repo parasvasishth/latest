@@ -9,13 +9,18 @@ import UIKit
 import Alamofire
 class SendEmailVC: UIViewController {
 @IBOutlet var emailField: UITextField!
-var hud = MBProgressHUD()
+    
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var logoView: UIView!
+    var hud = MBProgressHUD()
 override func viewDidLoad() {
     super.viewDidLoad()
-    
+    loadingView.isHidden = false
     emailField.attributedPlaceholder =
-        NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.4823529412, green: 0.4823529412, blue: 0.4823529412, alpha: 1)])
     // Do any additional setup after loading the view.
+    emailField.setLeftPaddingPoints(15)
+    loadingView.isHidden = true
 }
 
 @IBAction func back(_ sender: UIButton) {
@@ -28,10 +33,12 @@ override func viewDidLoad() {
 func send_Otp()
 {
     if  emailField.text != ""
-    { hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-        hud.mode = MBProgressHUDMode.indeterminate
-        hud.self.bezelView.color = UIColor.black
-        hud.label.text = "Loading...."
+{
+        //hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+//        hud.mode = MBProgressHUDMode.indeterminate
+//        hud.self.bezelView.color = UIColor.black
+//        hud.label.text = "Loading...."
+            loadingView.isHidden = false
         Alamofire.request("https://stumbal.com/process.php?action=user_send_email_otp", method: .post, parameters: ["email":emailField.text!],encoding:  URLEncoding.httpBody).responseJSON{ response in
             if let data = response.data
             {
@@ -67,6 +74,7 @@ func send_Otp()
                             
                             
                             MBProgressHUD.hide(for: self.view, animated: true)
+                            self.loadingView.isHidden = true
                             let otp :String = (json["otp"] as! NSNumber).stringValue
                             
                             UserDefaults.standard.setValue(otp, forKey: "OTP")
@@ -96,6 +104,8 @@ func send_Otp()
                         else {
                             
                             MBProgressHUD.hide(for: self.view, animated: true)
+                            self.loadingView.isHidden = true
+
                             let alert = UIAlertController(title: "", message: result, preferredStyle: UIAlertController.Style.alert)
                             alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
                             self.present(alert, animated: true, completion: nil)

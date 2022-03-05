@@ -205,7 +205,7 @@ func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath:
         for i  in 0...IdArr.count-1 {
             let name : String = IdArr[i] as! String
             if name == id {
-                cell.roundedView.backgroundColor = #colorLiteral(red: 0.431372549, green: 0.168627451, blue: 0.6823529412, alpha: 1)
+                cell.roundedView.backgroundColor = #colorLiteral(red: 0.7568627451, green: 0.7568627451, blue: 0.7568627451, alpha: 1)
                 UserDefaults.standard.set(true, forKey: String(format: "Selected%d", indexPath.row))
                 break
             }else{

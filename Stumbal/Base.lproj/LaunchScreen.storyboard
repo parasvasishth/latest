@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Poppins-Bold.ttf">
+            <string>Poppins-Bold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -16,17 +21,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash" translatesAutoresizingMaskIntoConstraints="NO" id="MR3-h6-fGJ">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E2w-S4-1zg">
+                                <rect key="frame" x="0.0" y="323" width="414" height="250"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stumballogo" translatesAutoresizingMaskIntoConstraints="NO" id="Uqf-6W-J1B">
+                                        <rect key="frame" x="157" y="20" width="100" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="1Yg-WO-cLX"/>
+                                            <constraint firstAttribute="height" constant="100" id="Zz1-WQ-Znj"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stumbal" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j3K-hH-Cba">
+                                        <rect key="frame" x="17" y="130" width="380" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="iiM-uD-eV0"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="j3K-hH-Cba" secondAttribute="bottom" constant="90" id="1Jn-jY-2IU"/>
+                                    <constraint firstItem="Uqf-6W-J1B" firstAttribute="centerX" secondItem="E2w-S4-1zg" secondAttribute="centerX" id="Grw-e7-4UK"/>
+                                    <constraint firstAttribute="trailing" secondItem="j3K-hH-Cba" secondAttribute="trailing" constant="17" id="JWI-Iq-jmj"/>
+                                    <constraint firstAttribute="width" constant="414" id="KyP-wz-xFX"/>
+                                    <constraint firstItem="Uqf-6W-J1B" firstAttribute="top" secondItem="E2w-S4-1zg" secondAttribute="top" constant="20" id="aKr-O2-4Dn"/>
+                                    <constraint firstItem="j3K-hH-Cba" firstAttribute="leading" secondItem="E2w-S4-1zg" secondAttribute="leading" constant="17" id="lkZ-BC-lh8"/>
+                                    <constraint firstItem="j3K-hH-Cba" firstAttribute="top" secondItem="Uqf-6W-J1B" secondAttribute="bottom" constant="10" id="whp-yB-1Kw"/>
+                                    <constraint firstAttribute="height" constant="250" id="zi5-ns-X7O"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="MR3-h6-fGJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iPL-ew-5nV"/>
-                            <constraint firstItem="MR3-h6-fGJ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="ile-uz-guw"/>
-                            <constraint firstAttribute="bottom" secondItem="MR3-h6-fGJ" secondAttribute="bottom" id="l8N-h9-uAT"/>
-                            <constraint firstItem="MR3-h6-fGJ" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="mEd-Vn-Age"/>
+                            <constraint firstItem="E2w-S4-1zg" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="AOv-XV-Z46"/>
+                            <constraint firstAttribute="trailing" secondItem="E2w-S4-1zg" secondAttribute="trailing" id="Toj-Vg-udV"/>
+                            <constraint firstItem="E2w-S4-1zg" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ZHC-iM-bYO"/>
+                            <constraint firstItem="E2w-S4-1zg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uAi-8b-uD6"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -36,9 +70,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Splash" width="410" height="750"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="stumballogo" width="946" height="1066"/>
     </resources>
 </document>
