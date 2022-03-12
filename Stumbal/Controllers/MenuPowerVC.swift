@@ -38,7 +38,11 @@ class MenuPowerVC: UIViewController,UISearchBarDelegate {
     }
    
     @IBAction func back(_ sender: UIButton) {
-        self.dismiss(animated: false, completion: nil)
+       // self.dismiss(animated: false, completion: nil)
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+        nextViewController.modalPresentationStyle = .fullScreen
+        self.present(nextViewController, animated:false, completion:nil)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

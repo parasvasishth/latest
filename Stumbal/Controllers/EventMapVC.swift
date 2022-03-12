@@ -45,9 +45,9 @@ override func viewDidLoad() {
 }
 
 @IBAction func selectevent(_ sender: UIButton) {
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+//    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+//    signuCon.modalPresentationStyle = .fullScreen
+//    self.present(signuCon, animated: false, completion:nil)
 }
 
 // MARK: - fetch_user_distance

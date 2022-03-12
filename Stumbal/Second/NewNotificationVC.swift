@@ -57,8 +57,8 @@ class NewNotificationVC: UIViewController,UITableViewDataSource,UITableViewDeleg
     }
     
     @IBAction func accept(_ sender: UIButton) {
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "BuyTicketVC") as! BuyTicketVC
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "CheckOutVC") as! CheckOutVC
         nextViewController.modalPresentationStyle = .fullScreen
         self.present(nextViewController, animated:false, completion:nil)
     }

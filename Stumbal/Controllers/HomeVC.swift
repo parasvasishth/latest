@@ -21,7 +21,6 @@ class CityLocation: NSObject, MKAnnotation {
     }
 }
 
-
 class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UITextFieldDelegate,GMSAutocompleteViewControllerDelegate,SWRevealViewControllerDelegate {
     
     @IBOutlet var menu: UIButton!
@@ -277,7 +276,9 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
     }
     
     @IBAction func exploreGps(_ sender: UIButton) {
+        
     }
+    
     @IBAction func exploreBtn(_ sender: UIButton) {
         mapView.isHidden = false
        // searchView.isHidden = false
@@ -443,8 +444,11 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
     }
     
     @IBAction func cancelView(_ sender: UIButton) {
+        tabBarController?.tabBar.isHidden = false
         showView.isHidden = true
         exploreGpsObj.isHidden = true
+       
+
     }
     
     
@@ -1161,13 +1165,33 @@ extension HomeVC : UITableViewDelegate,UITableViewDataSource
         
         
         cell.eventNameLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
+       // 1B0127
+//        cell.eventNameLbl.layer.shadowPath = UIBezierPath(rect: cell.eventNameLbl.bounds).cgPath
+      cell.eventNameLbl.layer.masksToBounds = false
+     cell.eventNameLbl.layer.shadowColor = #colorLiteral(red: 0.1058823529, green: 0.003921568627, blue: 0.1529411765, alpha: 1)
+        cell.eventNameLbl.layer.shadowRadius = 2
+    //cell.eventNameLbl.layer.shadowOffset =
+        cell.eventNameLbl.layer.shadowOpacity = 0.80
         
         
+//cell.eventNameLbl.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75).cgColor
+    
+       // cell.eventNameLbl.layer.cornerRadius = 10.0
+        
+        
+     
+     
+       // cell.eventNameLbl.layer.cornerRadius = 2
+        
+     
+       // cell.eventimg.contentMode = .center
    
      //  DispatchQueue.main.async { [self] in
        //     cell.eventListView.roundCorners(corners: [.topLeft, .topRight], radius: 10)
 //
      //   }
+        cell.eventimg.roundCorners5([.topLeft, .topRight], radius: 10)
+
 //
         let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
     
@@ -1305,3 +1329,49 @@ extension HomeVC : UITableViewDelegate,UITableViewDataSource
     }
 }
 
+extension UIImageView {
+    public func roundCorners5(_ corners: UIRectCorner, radius: CGFloat) {
+        let maskPath = UIBezierPath(roundedRect: bounds,
+                                    byRoundingCorners: corners,
+                                    cornerRadii: CGSize(width: radius, height: radius))
+        let shape = CAShapeLayer()
+        shape.path = maskPath.cgPath
+        layer.mask = shape
+    }
+}
+
+
+//extension UIView {
+//
+//    func roundCorners(_ corners: UIRectCorner, radius: CGFloat) {
+//        if #available(iOS 11.0, *) {
+//            clipsToBounds = true
+//            layer.cornerRadius = radius
+//            layer.maskedCorners = CACornerMask(rawValue: corners.rawValue)
+//        } else {
+//            let path = UIBezierPath(
+//                roundedRect: bounds,
+//                byRoundingCorners: corners,
+//                cornerRadii: CGSize(width: radius, height: radius)
+//            )
+//            let mask = CAShapeLayer()
+//            mask.path = path.cgPath
+//            layer.mask = mask
+//        }
+//    }
+//}
+extension UIView {
+
+func roundCorners(corners:UIRectCorner, radius: CGFloat) {
+    
+    DispatchQueue.main.async {
+        let path = UIBezierPath(roundedRect: self.bounds,
+                                byRoundingCorners: corners,
+                                cornerRadii: CGSize(width: radius, height: radius))
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = self.bounds
+        maskLayer.path = path.cgPath
+        self.layer.mask = maskLayer
+    }
+}
+}

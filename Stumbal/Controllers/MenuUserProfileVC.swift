@@ -68,10 +68,10 @@ override func viewDidLoad() {
     }
 
 @IBAction func viewCategory(_ sender: UIButton) {
-    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
-    nextViewController.modalPresentationStyle = .fullScreen
-    self.present(nextViewController, animated:false, completion:nil)
+//    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
+//    nextViewController.modalPresentationStyle = .fullScreen
+//    self.present(nextViewController, animated:false, completion:nil)
 }
 @IBAction func back(_ sender: UIButton) {
     self.dismiss(animated: false, completion: nil)
@@ -822,9 +822,9 @@ func ConvertImageToBase64String (img: UIImage) -> String {
             UserDefaults.standard.setValue(long, forKey: "Event_long")
             UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
             
-            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
-            signuCon.modalPresentationStyle = .fullScreen
-            self.present(signuCon, animated: false, completion:nil)
+//            var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+//            signuCon.modalPresentationStyle = .fullScreen
+//            self.present(signuCon, animated: false, completion:nil)
         }
 
 

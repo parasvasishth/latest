@@ -109,10 +109,10 @@ class NewArtistUserProfileVC: UIViewController,UICollectionViewDataSource,UIColl
     }
     
     @IBAction func ratingBtn(_ sender: UIButton) {
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "VendorReviewsVC") as! VendorReviewsVC
-        nextViewController.modalPresentationStyle = .fullScreen
-        self.present(nextViewController, animated:false, completion:nil)
+//        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "VendorReviewsVC") as! VendorReviewsVC
+//        nextViewController.modalPresentationStyle = .fullScreen
+//        self.present(nextViewController, animated:false, completion:nil)
     }
     
     @IBAction func unfollow(_ sender: UIButton) {

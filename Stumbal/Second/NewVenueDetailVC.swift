@@ -700,8 +700,9 @@ class NewVenueDetailVC: UIViewController,UICollectionViewDataSource,UICollection
         UserDefaults.standard.setValue(long, forKey: "Event_long")
         UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
 
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewUpcomingEventDetailVC") as! NewUpcomingEventDetailVC
             nextViewController.modalPresentationStyle = .fullScreen
             self.present(nextViewController, animated:false, completion:nil)
     }
@@ -789,8 +790,8 @@ class NewVenueDetailVC: UIViewController,UICollectionViewDataSource,UICollection
            UserDefaults.standard.setValue(long, forKey: "Event_long")
            UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
 
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewPastEventDetailVC") as! NewPastEventDetailVC
             nextViewController.modalPresentationStyle = .fullScreen
             self.present(nextViewController, animated:false, completion:nil)
         }

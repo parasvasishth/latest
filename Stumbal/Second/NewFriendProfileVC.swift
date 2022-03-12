@@ -554,10 +554,10 @@ class NewFriendProfileVC: UIViewController,UIImagePickerControllerDelegate,UINav
                 else
                 {
                     
-                    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                     let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ArtistRegisterVC") as! ArtistRegisterVC
-                    nextViewController.modalPresentationStyle = .fullScreen
-                   self.present(nextViewController, animated:false, completion:nil)
+//                    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//                     let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ArtistRegisterVC") as! ArtistRegisterVC
+//                    nextViewController.modalPresentationStyle = .fullScreen
+//                   self.present(nextViewController, animated:false, completion:nil)
                 }
                 
     //            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
@@ -568,10 +568,10 @@ class NewFriendProfileVC: UIViewController,UIImagePickerControllerDelegate,UINav
         }
         
         @IBAction func viewCategory(_ sender: UIButton) {
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
-        nextViewController.modalPresentationStyle = .fullScreen
-        self.present(nextViewController, animated:false, completion:nil)
+//        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
+//        nextViewController.modalPresentationStyle = .fullScreen
+//        self.present(nextViewController, animated:false, completion:nil)
     }
     @IBAction func changePassword(_ sender: UIButton) {
 
@@ -1589,10 +1589,10 @@ class NewFriendProfileVC: UIViewController,UIImagePickerControllerDelegate,UINav
                 UserDefaults.standard.setValue(lat, forKey: "Event_lat")
                 UserDefaults.standard.setValue(long, forKey: "Event_long")
                 UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
-                nextViewController.modalPresentationStyle = .fullScreen
-                self.present(nextViewController, animated:false, completion:nil)
+//                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+//                nextViewController.modalPresentationStyle = .fullScreen
+//                self.present(nextViewController, animated:false, completion:nil)
     //            let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
     //            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
     //            self.present(alert, animated: true, completion: nil)
@@ -1676,10 +1676,10 @@ class NewFriendProfileVC: UIViewController,UIImagePickerControllerDelegate,UINav
                 UserDefaults.standard.setValue(lat, forKey: "Event_lat")
                 UserDefaults.standard.setValue(long, forKey: "Event_long")
                 UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
-                nextViewController.modalPresentationStyle = .fullScreen
-                self.present(nextViewController, animated:false, completion:nil)
+//                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+//                nextViewController.modalPresentationStyle = .fullScreen
+//                self.present(nextViewController, animated:false, completion:nil)
     //            let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
     //            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
     //            self.present(alert, animated: true, completion: nil)

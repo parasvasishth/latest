@@ -393,10 +393,14 @@ class EditUserProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelega
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        let selectedImg=info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+      //  let selectedImg=info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         
-        let image1 : UIImage = selectedImg.resize(400)
-        let imageData = image1.jpegData(compressionQuality: 0.75)
+        
+      let selectedImg = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
+        //let image1 : UIImage = selectedImg.resize(400)
+       // let imageData = image1.jpegData(compressionQuality: 0.75)
+        
+        
         //        str1 = (imageData as AnyObject).base64EncodedString(options: .lineLength64Characters)
         //       // str1 = ConvertImageToBase64String(img: image1)
         //        let date = Date()
@@ -406,7 +410,7 @@ class EditUserProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         //        let strDate = formator.string(from: date)
         //        let imagePath = "iOSImage_\(strDate)_\(drand48()).png"
         //        imgName = imagePath
-        profileImg.image = image1
+        profileImg.image = selectedImg
         self.dismiss(animated: false, completion: nil)
         
     }
@@ -619,7 +623,7 @@ class EditUserProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelega
         let imageData = self.profileImg.image?.jpegData(compressionQuality: 0.0)
         str1 = (imageData as AnyObject).base64EncodedString(options: .lineLength64Characters)
         
-        
+        print("444",birthField.text!)
         Alamofire.request("https://stumbal.com/process.php?action=update_user_profile", method: .post, parameters: ["user_id":uID,"fname":firstnameField.text!,"lname":lastnameField.text!,"gender":genderFeild.text!,"email":emailField.text!,"dob":birthField.text!,"meta_tags":string1,"friends":friendString,"event_history":eventString,"genres":generString,"upcoming_event":upcomingString,"profile_image":imgName,"profile_string":str1], encoding:  URLEncoding.httpBody).responseJSON
         { response in
             if let data = response.data

@@ -725,13 +725,10 @@ class NewArtistProposalListVC: UIViewController,UICollectionViewDataSource,UICol
                 UserDefaults.standard.setValue(lat, forKey: "Event_lat")
                 UserDefaults.standard.setValue(long, forKey: "Event_long")
                 UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewUpcomingEventDetailVC") as! NewUpcomingEventDetailVC
                 nextViewController.modalPresentationStyle = .fullScreen
                 self.present(nextViewController, animated:false, completion:nil)
-//                let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
-//                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//                self.present(alert, animated: true, completion: nil)
             }
             else if collectionView == pastCollView
             {
@@ -812,13 +809,10 @@ class NewArtistProposalListVC: UIViewController,UICollectionViewDataSource,UICol
                 UserDefaults.standard.setValue(lat, forKey: "Event_lat")
                 UserDefaults.standard.setValue(long, forKey: "Event_long")
                 UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewPastEventDetailVC") as! NewPastEventDetailVC
                 nextViewController.modalPresentationStyle = .fullScreen
                 self.present(nextViewController, animated:false, completion:nil)
-//                let alert = UIAlertController(title: "", message: "Coming Soon", preferredStyle: UIAlertController.Style.alert)
-//                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-//                self.present(alert, animated: true, completion: nil)
             }
             else
             {

@@ -70,6 +70,8 @@ var artistRating:String = ""
 var blockStatus:String = ""
 var status:String = ""
 var type:String = ""
+    var categoryStatus:String = ""
+    var friendstatus:String = ""
 override func viewDidLoad() {
     super.viewDidLoad()
     //  tabBarController?.tabBar.isHidden = true
@@ -121,19 +123,38 @@ override func viewDidLoad() {
 
 
 @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer){
-    //        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-    //        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "FriendsVC") as! FriendsVC
-    //        nextViewController.modalPresentationStyle = .fullScreen
-    //        self.present(nextViewController, animated:false, completion:nil)
-    //UserDefaults.standard.set(true, forKey: "FriendList")
-    
-    let storyBoard : UIStoryboard = UIStoryboard(name: "Second", bundle:nil)
-    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewFriendListVC") as! NewFriendListVC
-    nextViewController.modalPresentationStyle = .fullScreen
-    self.present(nextViewController, animated:false, completion:nil)
-    
-    
-    
+  
+    if self.status == "Accept"
+    {
+        if self.friendstatus == "Only Me"
+        {
+            
+        }
+        else
+        {
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "OtherUserFriendListVC") as! OtherUserFriendListVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
+                   
+        }
+    }
+    else
+    {
+        if self.categoryStatus == "Everyone"
+        {
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Third", bundle:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "OtherUserFriendListVC") as! OtherUserFriendListVC
+            nextViewController.modalPresentationStyle = .fullScreen
+            self.present(nextViewController, animated:false, completion:nil)
+        }
+        else
+        {
+            
+                 
+        }
+    }
+  
 }
 
 override func viewWillAppear(_ animated: Bool) {
@@ -342,7 +363,7 @@ override func viewWillAppear(_ animated: Bool) {
         {
             
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ArtistRegisterVC") as! ArtistRegisterVC
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewArtistRegisteredVC") as! NewArtistRegisteredVC
             nextViewController.modalPresentationStyle = .fullScreen
             self.present(nextViewController, animated:false, completion:nil)
         }
@@ -355,10 +376,10 @@ override func viewWillAppear(_ animated: Bool) {
 }
 
 @IBAction func viewCategory(_ sender: UIButton) {
-    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
-    nextViewController.modalPresentationStyle = .fullScreen
-    self.present(nextViewController, animated:false, completion:nil)
+//    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
+//    nextViewController.modalPresentationStyle = .fullScreen
+//    self.present(nextViewController, animated:false, completion:nil)
 }
 @IBAction func sendrequest(_ sender: UIButton) {
     if status == "Pending"
@@ -811,6 +832,65 @@ func friend_request()
 //
 //
 //    }
+    
+    func fetch_friend_status1()
+    {
+    //    hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+    //    hud.mode = MBProgressHUDMode.indeterminate
+    //    hud.self.bezelView.color = UIColor.black
+    //    hud.label.text = "Loading...."
+        
+        Alamofire.request("https://stumbal.com/process.php?action=fetch_friend_status", method: .post, parameters: ["user_id":UserDefaults.standard.value(forKey: "u_Id") as! String,"req_id":UserDefaults.standard.value(forKey: "friend_rid") as! String],encoding:  URLEncoding.httpBody).responseJSON{ response in
+            if let data = response.data
+            {
+                let json = String(data: data, encoding: String.Encoding.utf8)
+                print("=====1======")
+                print("Response: \(String(describing: json))")
+                print("22222222222222")
+                //print(response.result.value as Any)
+                if json == ""
+                {
+                    MBProgressHUD.hide(for: self.view, animated: true);
+                    let alert = UIAlertController(title: "Loading...", message: "", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {(action:UIAlertAction!) in
+                        print("Action")
+                        self.fetch_friend_status1()
+                    }))
+                    self.present(alert, animated: false, completion: nil)
+                }
+                else
+                {
+                    if let json: NSDictionary = response.result.value as? NSDictionary
+                        
+                    {
+                        print("JSON: \(json)")
+                        print("66666666666")
+                        let result:String = json["status"] as! String
+                        MBProgressHUD.hide(for: self.view, animated: true)
+                        
+                        self.status = json["status"] as! String
+                        
+                        self.fetch_upcoming_events()
+                        
+                    }
+                    else
+                    {
+                       
+                        self.loadingView.isHidden = true
+                       // self.fetch_upcoming_events()
+                    }
+                    
+                }
+                
+            }
+            else
+            {
+                print("525")
+            }
+        }
+        
+    }
+    
 
 func fetch_friend_status()
 {
@@ -892,6 +972,17 @@ func fetch_friend_status()
                                 self.removeObj.setTitle("Friend request sent", for: .normal)
                                 self.selectobj.isHidden = false
                             }
+                           else if self.blockStatus == "block"
+                            {
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = false
+                                self.friendLbl.text = "Blocked"
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = true
+                                self.sendlbl.text = "Friend"
+                                self.removeObj.setTitle("Remove Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
                             else
                             {
                                 self.sendlbl.text = "Send a Friend Request"
@@ -907,13 +998,29 @@ func fetch_friend_status()
                         }
                         else
                         {
-                            self.sendlbl.text = "Send a Friend Request"
-                            self.acceptStack.isHidden = true
-                            self.friendsView.isHidden = true
-                            self.statusLbl.isHidden = true
-                            self.sendView.isHidden = false
-                            self.removeObj.setTitle("Add Friend", for: .normal)
-                            self.selectobj.isHidden = false
+                            if self.blockStatus == "block"
+                            {
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = false
+                                self.friendLbl.text = "Blocked"
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = true
+                                self.sendlbl.text = "Friend"
+                                self.removeObj.setTitle("Remove Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            else
+                            {
+                                self.sendlbl.text = "Send a Friend Request"
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = true
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = false
+                                self.removeObj.setTitle("Add Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            
+                           
                             
                             
                         }
@@ -948,23 +1055,55 @@ func fetch_friend_status()
                         }
                         else if self.status == "Pending"
                         {
-                            self.acceptStack.isHidden = false
-                            self.friendsView.isHidden = true
-                            self.statusLbl.isHidden = false
-                            self.sendView.isHidden = true
-                            self.sendlbl.text = "Request Sent"
-                            self.removeObj.setTitle("Friend request sent", for: .normal)
-                            self.selectobj.isHidden = true
+                            if self.blockStatus == "block"
+                            {
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = false
+                                self.friendLbl.text = "Blocked"
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = true
+                                self.sendlbl.text = "Friend"
+                                self.removeObj.setTitle("Remove Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            else
+                            {
+                                self.acceptStack.isHidden = false
+                                self.friendsView.isHidden = true
+                                self.statusLbl.isHidden = false
+                                self.sendView.isHidden = true
+                                self.sendlbl.text = "Request Sent"
+                                self.removeObj.setTitle("Friend request sent", for: .normal)
+                                self.selectobj.isHidden = true
+                            }
+                            
+                           
                         }
                         else
                         {
-                            self.sendlbl.text = "Send a Friend Request"
-                            self.acceptStack.isHidden = true
-                            self.friendsView.isHidden = true
-                            self.statusLbl.isHidden = true
-                            self.sendView.isHidden = false
-                            self.removeObj.setTitle("Add Friend", for: .normal)
-                            self.selectobj.isHidden = true
+                            if self.blockStatus == "block"
+                            {
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = false
+                                self.friendLbl.text = "Blocked"
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = true
+                                self.sendlbl.text = "Friend"
+                                self.removeObj.setTitle("Remove Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            else
+                            {
+                                self.sendlbl.text = "Send a Friend Request"
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = true
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = false
+                                self.removeObj.setTitle("Add Friend", for: .normal)
+                                self.selectobj.isHidden = true
+                            }
+                            
+                          
                         }
                     }
                     else
@@ -996,23 +1135,56 @@ func fetch_friend_status()
                         }
                         else if self.status == "Pending"
                         {
-                            self.acceptStack.isHidden = true
-                            self.friendsView.isHidden = true
-                            self.statusLbl.isHidden = true
-                            self.sendView.isHidden = false
-                            self.sendlbl.text = "Request Sent"
-                            self.removeObj.setTitle("Friend request sent", for: .normal)
-                            self.selectobj.isHidden = false
+                            if self.blockStatus == "block"
+                            {
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = false
+                                self.friendLbl.text = "Blocked"
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = true
+                                self.sendlbl.text = "Friend"
+                                self.removeObj.setTitle("Remove Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            else
+                            {
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = true
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = false
+                                self.sendlbl.text = "Request Sent"
+                                self.removeObj.setTitle("Friend request sent", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            
+                           
                         }
                         else
                         {
-                            self.sendlbl.text = "Send a Friend Request"
-                            self.acceptStack.isHidden = false
-                            self.friendsView.isHidden = true
-                            self.statusLbl.isHidden = false
-                            self.sendView.isHidden = true
-                            self.removeObj.setTitle("Add Friend", for: .normal)
-                            self.selectobj.isHidden = false
+                            
+                            if self.blockStatus == "block"
+                            {
+                                self.acceptStack.isHidden = true
+                                self.friendsView.isHidden = false
+                                self.friendLbl.text = "Blocked"
+                                self.statusLbl.isHidden = true
+                                self.sendView.isHidden = true
+                                self.sendlbl.text = "Friend"
+                                self.removeObj.setTitle("Remove Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            else
+                            {
+                                self.sendlbl.text = "Send a Friend Request"
+                                self.acceptStack.isHidden = false
+                                self.friendsView.isHidden = true
+                                self.statusLbl.isHidden = false
+                                self.sendView.isHidden = true
+                                self.removeObj.setTitle("Add Friend", for: .normal)
+                                self.selectobj.isHidden = false
+                            }
+                            
+                            
                         }
                     }
                     self.loadingView.isHidden = true
@@ -1362,40 +1534,19 @@ func fecth_Profile()
                     
                 {
                     
-                    //                                let result:String = json["result"] as! String
-                    //
-                    //                                if result == "success"
-                    //                                {
+                  
                     self.nameLbl.text = json["name"] as! String
-                    //  self.emaillbl.text = json["email"] as! String
-                    //  self.contactLbl.text = json["contact"] as! String
-                    //  user_image
+                    
+                    self.friendstatus = json["friends"] as! String
+                    self.categoryStatus = json["genres"] as! String
+                 
                     
                     UserDefaults.standard.setValue(json["cat_name"] as! String, forKey: "Pro_Cat")
                     
                     self.categoryCountlbl.text = json["category_count"] as! String
                     self.friendCountLbl.text = json["friend_count"] as! String
-                    //  self.profileImg.sd_setImage(with: URL(string:json["user_image"] as! String), placeholderImage: UIImage(named: "udefault"))
-                    
-                    
-                    
-                    //                    self.profileImg?.sd_setImage(with: URL(string:json["user_image"] as! String )) { (image, error, cache, urls) in
-                    //                                if (error != nil) {
-                    //                                    self.profileImg.image = UIImage(named: "udefault")
-                    //                                } else {
-                    //                                    self.profileImg.image = image
-                    //                                }
-                    //                    }
-                    
+                
                     let uimg:String = json["user_image"] as! String
-                    
-                    
-                    //                    let imageUrl = URL(string: "your image url")
-                    //                     //Size refer to the size which you want to resize your original image
-                    //                     let size = CGSize(width: 60, height: 60)
-                    //                    let processImage = ResizingImageProcessor(targetSize: size, contentMode: .aspectFill)
-                    //                     cell.courseTitleImage.kf.setImage(with: imageUrl! , placeholder: UIImage(named: "placeholder"), options: [.transition(ImageTransition.fade(1)), .processor(processImage)], progressBlock: nil, completionHandler: nil)
-                    
                     
                     if uimg == ""
                     {
@@ -1430,7 +1581,9 @@ func fecth_Profile()
                         
                     }
                     
-                    self.fetch_upcoming_events()
+                  
+                    
+                    self.fetch_friend_status1()
                     
                     // MBProgressHUD.hide(for: self.view, animated: true)
                     
@@ -1518,6 +1671,8 @@ func update_profile_image()
     
 }
 
+    var upcomingNewArr:NSMutableArray = NSMutableArray()
+    var pastNewArray:NSMutableArray = NSMutableArray()
 
 //MARK: fetch_upcoming_events ;
 func fetch_upcoming_events()
@@ -1550,70 +1705,90 @@ func fetch_upcoming_events()
             }
             else
             {
+
+                
                 do  {
-                    self.AppendArr = NSMutableArray()
-                    self.AppendArr =  try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray as! NSMutableArray
-                    //                    print(self.Arr.count)
-                    //                    print(self.Arr)
-                    //                    self.AppendArr = NSMutableArray()
-                    //                    for i in 0...self.Arr.count-1
-                    //                    {
-                    //                        if (self.Arr.object(at: i) as AnyObject).value(forKey: "card_number") is NSNull {
-                    //                        } else {
-                    //                            print((self.Arr.object(at:i) as AnyObject).value(forKey: "name"),i)
-                    //                            self.AppendArr.add(self.Arr[i])
-                    //                        }
-                    //
-                    //                    }
-                    //
-                    //                    print(self.AppendArr)
+                   self.upcomingNewArr = NSMutableArray()
+                    self.upcomingNewArr =  try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray as! NSMutableArray
+                   
+                   
+                   
+                   self.AppendArr = NSMutableArray()
+                   if self.upcomingNewArr.count != 0
+                   {
+                       if self.status == "Accept"
+                       {
+                           for i in 0...self.upcomingNewArr.count-1
+                           {
+                               if (self.upcomingNewArr.object(at: i) as AnyObject).value(forKey: "type") as! String == "Only Me" {
+                               } else {
+                                   print((self.upcomingNewArr.object(at:i) as AnyObject).value(forKey: "type"),i)
+                                   self.AppendArr.add(self.upcomingNewArr[i])
+                               }
+                               
+                           }
+                       }
+                       else
+                       {
+                           for i in 0...self.upcomingNewArr.count-1
+                           {
+                               if (self.upcomingNewArr.object(at: i) as AnyObject).value(forKey: "type") as! String == "Only Me"  {
+                               }
+                               else if (self.upcomingNewArr.object(at: i) as AnyObject).value(forKey: "type") as! String == "Friend"
+                               {
+                                   
+                               }
+                               else {
+                                   print((self.upcomingNewArr.object(at:i) as AnyObject).value(forKey: "type"),i)
+                                   self.AppendArr.add(self.upcomingNewArr[i])
+                               }
+                               
+                           }
+                       }
+                       
+                       
+                       
                     
-                    
-                    if self.AppendArr.count != 0 {
+                       
+                       if self.AppendArr.count != 0 {
+                           
                         
-                        
-                        //                            let contentOffset = self.eventTblView.contentOffset
-                        //
-                        //                            self.eventTblView.layoutIfNeeded()
-                        //                            self.eventTblView.setContentOffset(contentOffset, animated: false)
-                        //                            self.tblHeight.constant =  CGFloat(126 * self.AppendArr.count)
-                        //
-                        // self.statusLbl.isHidden = true
-                        //                         self.upcomingLblHeight.constant = 21
-                        //                         self.upcominglbl.isHidden = false
-                        //                         self.upcomingCollHeight.constant = 100
-                        //                         self.upcomingLineHeight.constant = 2
-                        self.upcomingCollView.isHidden = false
-                        self.firstView.isHidden = false
-                        self.firstViewHeight.constant = 157
-                        self.upcomingCollView.reloadData()
-                        self.fetch_past_events()
-                        //  self.tblHeight.constant = 400
-                        
-                        MBProgressHUD.hide(for: self.view, animated: true)
-                    }
-                    
-                    else  {
-                        
-                        
-                        //                         self.upcomingLblHeight.constant = 0
-                        //                         self.upcominglbl.isHidden = true
-                        //                         self.upcomingCollHeight.constant = 0
-                        //                         self.upcomingLineHeight.constant = 0
-                        self.upcomingnheight.constant = 0
-                        self.firstView.isHidden = true
-                        self.firstViewHeight.constant = 0
-                        self.upcomingCollView.isHidden = false
-                        // self.statusLbl.isHidden = false
-                        // self.statusLbl.text = "No upcoming events"
-                        //  self.tblHeight.constant = 100
-                        //  self.upcomingCollView.reloadData()
-                        self.fetch_past_events()
-                        //  self.tblHeight.constant = 0
-                        //  self.selectcardLbl.isHidden = true
-                        MBProgressHUD.hide(for: self.view, animated: true)
-                    }
-                    
+                           self.upcomingCollView.isHidden = false
+                           self.firstView.isHidden = false
+                           self.firstViewHeight.constant = 157
+                           self.upcomingCollView.reloadData()
+                           self.fetch_past_events()
+                           //  self.tblHeight.constant = 400
+                           
+                           MBProgressHUD.hide(for: self.view, animated: true)
+                           
+                       }
+                       
+                       else  {
+                           
+                         
+                           self.upcomingnheight.constant = 0
+                           self.firstView.isHidden = true
+                           self.firstViewHeight.constant = 0
+                           self.upcomingCollView.isHidden = false
+                           self.fetch_past_events()
+                          
+                           MBProgressHUD.hide(for: self.view, animated: true)
+                       }
+                       
+                       
+                   }
+                   else
+                   {
+                       self.upcomingnheight.constant = 0
+                       self.firstView.isHidden = true
+                       self.firstViewHeight.constant = 0
+                       self.upcomingCollView.isHidden = false
+                       self.fetch_past_events()
+                     
+                       MBProgressHUD.hide(for: self.view, animated: true)
+                   }
+                   
                 }
                 catch
                 {
@@ -1658,67 +1833,106 @@ func fetch_past_events()
             }
             else
             {
+      
                 do  {
-                    self.pastArr = NSMutableArray()
-                    self.pastArr =  try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray as! NSMutableArray
-                    //                    print(self.Arr.count)
-                    //                    print(self.Arr)
-                    //                    self.AppendArr = NSMutableArray()
-                    //                    for i in 0...self.Arr.count-1
-                    //                    {
-                    //                        if (self.Arr.object(at: i) as AnyObject).value(forKey: "card_number") is NSNull {
-                    //                        } else {
-                    //                            print((self.Arr.object(at:i) as AnyObject).value(forKey: "name"),i)
-                    //                            self.AppendArr.add(self.Arr[i])
-                    //                        }
-                    //
-                    //                    }
-                    //
-                    //                    print(self.AppendArr)
+                   self.pastNewArray = NSMutableArray()
+                    self.pastNewArray =  try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray as! NSMutableArray
+                   
+                   
+                   
+                   self.pastArr = NSMutableArray()
+                   if self.pastNewArray.count != 0
+                   {
+                       if self.status == "Accept"
+                       {
+                           for i in 0...self.pastNewArray.count-1
+                           {
+                               if (self.pastNewArray.object(at: i) as AnyObject).value(forKey: "type") as! String == "Only Me" {
+                               } else {
+                                   print((self.pastNewArray.object(at:i) as AnyObject).value(forKey: "type"),i)
+                                   self.pastArr.add(self.pastNewArray[i])
+                               }
+                               
+                           }
+                       }
+                       else
+                       {
+                           for i in 0...self.pastNewArray.count-1
+                           {
+                               if (self.pastNewArray.object(at: i) as AnyObject).value(forKey: "type") as! String == "Only Me"  {
+                               }
+                               else if (self.pastNewArray.object(at: i) as AnyObject).value(forKey: "type") as! String == "Friend"
+                               {
+                                   
+                               }
+                               else {
+                                   print((self.pastNewArray.object(at:i) as AnyObject).value(forKey: "type"),i)
+                                   self.pastArr.add(self.pastNewArray[i])
+                               }
+                               
+                           }
+                       }
+                       
+                       
+                       
                     
-                    
-                    if self.pastArr.count != 0 {
+                       
+                       if self.pastArr.count != 0 {
+                           
                         
-                        
-                        //                            let contentOffset = self.eventTblView.contentOffset
-                        //
-                        //                            self.eventTblView.layoutIfNeeded()
-                        //                            self.eventTblView.setContentOffset(contentOffset, animated: false)
-                        //                            self.tblHeight.constant =  CGFloat(126 * self.AppendArr.count)
-                        //
-                        // self.statusLbl.isHidden = true
-                        //                         self.patsLblHeight.constant = 21
-                        //                         self.pastLbl.isHidden = false
-                        //                         self.pastCollHeight.constant = 290
-                        self.secondView.isHidden = false
-                        self.secondViewHeight.constant = 299
-                        self.pastCollView.isHidden = false
-                        //self.tblHeight.constant = 400
-                        self.pastCollView.reloadData()
-                        self.eventCountlbl.text = String(self.pastArr.count)
-                        self.fetch_user_category()
-                        
-                        MBProgressHUD.hide(for: self.view, animated: true)
-                    }
-                    
-                    else  {
-                        self.pastnHeight.constant = 0
-                        self.eventCountlbl.text = String(self.pastArr.count)
-                        //                         self.patsLblHeight.constant = 0
-                        //                         self.pastLbl.isHidden = true
-                        //                         self.pastCollHeight.constant = 0
-                        self.secondView.isHidden = false
-                        self.secondViewHeight.constant = 0
-                        self.pastCollView.isHidden = false
-                        //   self.statusLbl.isHidden = false
-                        // self.statusLbl.text = "No past events"
-                        //self.tblHeight.constant = 100
-                        //  self.pastCollView.reloadData()
-                        self.fetch_user_category()
-                        //  self.selectcardLbl.isHidden = true
-                        MBProgressHUD.hide(for: self.view, animated: true)
-                    }
-                    
+                           self.secondView.isHidden = false
+                           self.secondViewHeight.constant = 299
+                           self.pastCollView.isHidden = false
+                           //self.tblHeight.constant = 400
+                           self.pastCollView.reloadData()
+                           self.eventCountlbl.text = String(self.pastArr.count)
+                           self.fetch_user_category()
+                           
+                           MBProgressHUD.hide(for: self.view, animated: true)
+                           
+                       }
+                       
+                       else  {
+                           
+                         
+                           self.pastnHeight.constant = 0
+                           self.eventCountlbl.text = String(self.pastArr.count)
+                           //                         self.patsLblHeight.constant = 0
+                           //                         self.pastLbl.isHidden = true
+                           //                         self.pastCollHeight.constant = 0
+                           self.secondView.isHidden = false
+                           self.secondViewHeight.constant = 0
+                           self.pastCollView.isHidden = false
+                           //   self.statusLbl.isHidden = false
+                           // self.statusLbl.text = "No past events"
+                           //self.tblHeight.constant = 100
+                           //  self.pastCollView.reloadData()
+                           self.fetch_user_category()
+                           //  self.selectcardLbl.isHidden = true
+                           MBProgressHUD.hide(for: self.view, animated: true)
+                       }
+                       
+                       
+                   }
+                   else
+                   {
+                       self.pastnHeight.constant = 0
+                       self.eventCountlbl.text = String(self.pastArr.count)
+                       //                         self.patsLblHeight.constant = 0
+                       //                         self.pastLbl.isHidden = true
+                       //                         self.pastCollHeight.constant = 0
+                       self.secondView.isHidden = false
+                       self.secondViewHeight.constant = 0
+                       self.pastCollView.isHidden = false
+                       //   self.statusLbl.isHidden = false
+                       // self.statusLbl.text = "No past events"
+                       //self.tblHeight.constant = 100
+                       //  self.pastCollView.reloadData()
+                       self.fetch_user_category()
+                       //  self.selectcardLbl.isHidden = true
+                       MBProgressHUD.hide(for: self.view, animated: true)
+                   }
+                   
                 }
                 catch
                 {
@@ -1767,80 +1981,82 @@ func fetch_user_category()
                 do  {
                     self.cateArr = NSMutableArray()
                     self.cateArr =  try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray as! NSMutableArray
-                    //                    print(self.Arr.count)
-                    //                    print(self.Arr)
-                    //                    self.AppendArr = NSMutableArray()
-                    //                    for i in 0...self.Arr.count-1
-                    //                    {
-                    //                        if (self.Arr.object(at: i) as AnyObject).value(forKey: "card_number") is NSNull {
-                    //                        } else {
-                    //                            print((self.Arr.object(at:i) as AnyObject).value(forKey: "name"),i)
-                    //                            self.AppendArr.add(self.Arr[i])
-                    //                        }
-                    //
-                    //                    }
-                    //
-                    //                    print(self.AppendArr)
+                  
                     
                     
                     if self.cateArr.count != 0 {
                         
-                        
-                        //                            let contentOffset = self.eventTblView.contentOffset
-                        //
-                        //                            self.eventTblView.layoutIfNeeded()
-                        //                            self.eventTblView.setContentOffset(contentOffset, animated: false)
-                        //                            self.tblHeight.constant =  CGFloat(126 * self.AppendArr.count)
-                        //
-                        // self.statusLbl.isHidden = true
-                        // self.catetoproHeight.constant = 20
-                        //                         self.upcomingLblHeight.constant = 0
-                        //                         self.upcomingCollHeight.constant = 0
-                        //                         self.upcomingLblHeight.constant = 0
-                        //  self.pastToupcomingHeight.constant = 10
-                        //   self.pastcollTopasteventHeight.constant = 10
-                        //                         self.categoryLblHeight.constant = 21
-                        //                         self.categoryLbl.isHidden = false
-                        //                         self.categoryCollHeight.constant = 80
-                        //                         self.categoryLineLblHeight.constant = 2
-                        
-                        
-                        self.thirdView.isHidden = false
-                        self.thirdViewHeight.constant = 137
-                        self.categoryCollView.isHidden = false
-                        
-                        //self.tblHeight.constant = 400
-                        self.categoryCollView.reloadData()
-                       // self.loadingView.isHidden = true
-                        //    self.pastToupcomingHeight.constant = 10
-                        // self.eventHeight.constant = 200
-                        // self.tabBarController?.tabBar.isHidden = false
-                        // self.tabBarController?.tabBar.backgroundColor = UIColor.black
-                        self.fetch_block_unblock_user()
-                        MBProgressHUD.hide(for: self.view, animated: true)
+                
+                        if self.status == "Accept"
+                        {
+                            if self.categoryStatus == "Only Me"
+                            {
+                                self.categoryLblHeight.constant = 0
+                                self.thirdView.isHidden = true
+                                self.thirdViewHeight.constant = 0
+                                self.categoryCollView.isHidden = true
+                              
+                                self.categoryCollView.reloadData()
+                            
+                                self.fetch_block_unblock_user()
+                           
+                                MBProgressHUD.hide(for: self.view, animated: true)
+                            }
+                            else
+                            {
+                                
+                                        self.thirdView.isHidden = false
+                                        self.thirdViewHeight.constant = 137
+                                        self.categoryCollView.isHidden = false
+                                        
+                                        self.categoryCollView.reloadData()
+                                     
+                                        self.fetch_block_unblock_user()
+                                        MBProgressHUD.hide(for: self.view, animated: true)
+                            }
+                        }
+                        else
+                        {
+                            if self.categoryStatus == "Everyone"
+                            {
+                                self.thirdView.isHidden = false
+                                self.thirdViewHeight.constant = 137
+                                self.categoryCollView.isHidden = false
+                                
+                                self.categoryCollView.reloadData()
+                             
+                                self.fetch_block_unblock_user()
+                                MBProgressHUD.hide(for: self.view, animated: true)
+                            }
+                            else
+                            {
+                                self.categoryLblHeight.constant = 0
+                                self.thirdView.isHidden = true
+                                self.thirdViewHeight.constant = 0
+                                self.categoryCollView.isHidden = true
+                              
+                                self.categoryCollView.reloadData()
+                            
+                                self.fetch_block_unblock_user()
+                           
+                                MBProgressHUD.hide(for: self.view, animated: true)
+                                     
+                            }
+                        }
                     }
                     
                     else  {
-                        //                         self.categoryLblHeight.constant = 0
-                        //                         self.categoryLbl.isHidden = true
-                        //                         self.categoryCollHeight.constant = 0
-                        //                         self.categoryLineLblHeight.constant = 0
+                   
                         
                         self.categoryLblHeight.constant = 0
                         self.thirdView.isHidden = true
                         self.thirdViewHeight.constant = 0
                         self.categoryCollView.isHidden = true
-                        //self.pastToupcomingHeight.constant = 10
-                        //self.eventHeight.constant = 200
-                        //   self.statusLbl.isHidden = false
-                        // self.statusLbl.text = "No past events"
-                        //self.tblHeight.constant = 100
+                      
                         self.categoryCollView.reloadData()
-                     //   self.loadingView.isHidden = true
-                        // self.tabBarController?.tabBar.isHidden = false
-                        //    self.tabBarController?.tabBar.backgroundColor = UIColor.black
+                    
                         self.fetch_block_unblock_user()
-                        //  self.selectcardLbl.isHidden = true
+                   
                         MBProgressHUD.hide(for: self.view, animated: true)
                     }
                     

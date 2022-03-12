@@ -180,8 +180,8 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     
     UserDefaults.standard.setValue(artistRating, forKey: "Event_artrating")
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "ArtistUserProfileVC") as! ArtistUserProfileVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+//    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "ArtistUserProfileVC") as! ArtistUserProfileVC
+//    signuCon.modalPresentationStyle = .fullScreen
+//    self.present(signuCon, animated: false, completion:nil)
 }
 }

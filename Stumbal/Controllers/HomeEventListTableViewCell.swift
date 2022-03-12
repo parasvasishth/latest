@@ -12,6 +12,7 @@ class HomeEventListTableViewCell: UITableViewCell {
     @IBOutlet weak var eventListView: UIView!
     @IBOutlet weak var eventimg: UIImageView!
     @IBOutlet weak var eventNameLbl: UILabel!
+   
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

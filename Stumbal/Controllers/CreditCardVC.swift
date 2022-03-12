@@ -232,6 +232,7 @@ func createCardTextField()
     paymentTextField.frame = CGRect(x: 15, y: 199, width: self.view.frame.size.width - 30, height: 44)
     paymentTextField.translatesAutoresizingMaskIntoConstraints = false
     paymentTextField.borderWidth = 0
+    paymentTextField.textColor = UIColor.white
     
     let border = CALayer()
     let width = CGFloat(1.0)

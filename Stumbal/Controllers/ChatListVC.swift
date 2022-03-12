@@ -454,9 +454,10 @@ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     UserDefaults.standard.setValue((AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "status")as! String, forKey: "friend_status")
     }
     
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "FriendProfileVC") as! FriendProfileVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
+    let storyBoard : UIStoryboard = UIStoryboard(name: "Second", bundle:nil)
+    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "NewPastEventDetailVC") as! NewPastEventDetailVC
+    nextViewController.modalPresentationStyle = .fullScreen
+    self.present(nextViewController, animated:false, completion:nil)
 }
 
 

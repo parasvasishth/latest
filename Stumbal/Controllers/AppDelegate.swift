@@ -180,37 +180,3 @@ func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: Str
     // Note: This callback is fired at each app startup and whenever a new token is generated.
 }
 }
-
-//extension AppDelegate:UNUserNotificationCenterDelegate
-//{
-//    func userNotificationCenter(_ center: UNUserNotificationCenter,
-//                                willPresent notification: UNNotification,
-//      withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-//      let userInfo = notification.request.content.userInfo
-//
-//      Messaging.messaging().appDidReceiveMessage(userInfo)
-//
-//
-//      // Change this to your preferred presentation option
-//      completionHandler([[.alert, .sound]])
-//    }
-//
-//    func userNotificationCenter(_ center: UNUserNotificationCenter,
-//                                didReceive response: UNNotificationResponse,
-//                                withCompletionHandler completionHandler: @escaping () -> Void) {
-//      let userInfo = response.notification.request.content.userInfo
-//
-//      Messaging.messaging().appDidReceiveMessage(userInfo)
-//
-//      completionHandler()
-//    }
-//
-////    func application(_ application: UIApplication,
-////    didReceiveRemoteNotification userInfo: [AnyHashable : Any],
-////       fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-////      Messaging.messaging().appDidReceiveMessage(userInfo)
-////      completionHandler(.noData)
-////    }
-//
-//}
-

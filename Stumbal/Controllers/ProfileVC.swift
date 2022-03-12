@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 import SDWebImage
 import Kingfisher
-class ProfileVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
+class ProfileVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
 
 @IBOutlet var menu: UIButton!
 @IBOutlet var profileImg: UIImageView!
@@ -264,47 +264,44 @@ override func viewWillAppear(_ animated: Bool) {
     }
     
     @IBAction func artist(_ sender: UIButton) {
-        if UserDefaults.standard.bool(forKey: "ArtistLogin") == true
-        {
-            UserDefaults.standard.set(false, forKey: "ArtistLogin")
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-            nextViewController.modalPresentationStyle = .fullScreen
-           self.present(nextViewController, animated:false, completion:nil)
-        }
-        else
-        {
-            UserDefaults.standard.set(true, forKey: "ArtistLogin")
-            
-            if UserDefaults.standard.value(forKey: "checkuser") as! String == "artist"
-            {
-                
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                 let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-                nextViewController.modalPresentationStyle = .fullScreen
-               self.present(nextViewController, animated:false, completion:nil)
-            }
-            else
-            {
-                
-                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                 let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ArtistRegisterVC") as! ArtistRegisterVC
-                nextViewController.modalPresentationStyle = .fullScreen
-               self.present(nextViewController, animated:false, completion:nil)
-            }
-            
+//        if UserDefaults.standard.bool(forKey: "ArtistLogin") == true
+//        {
+//            UserDefaults.standard.set(false, forKey: "ArtistLogin")
 //            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
 //             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
 //            nextViewController.modalPresentationStyle = .fullScreen
 //           self.present(nextViewController, animated:false, completion:nil)
-        }
+//        }
+//        else
+//        {
+//            UserDefaults.standard.set(true, forKey: "ArtistLogin")
+//
+//            if UserDefaults.standard.value(forKey: "checkuser") as! String == "artist"
+//            {
+//
+//                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//                 let nextViewController = storyBoard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+//                nextViewController.modalPresentationStyle = .fullScreen
+//               self.present(nextViewController, animated:false, completion:nil)
+//            }
+//            else
+//            {
+//
+//                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//                 let nextViewController = storyBoard.instantiateViewController(withIdentifier: "ArtistRegisterVC") as! ArtistRegisterVC
+//                nextViewController.modalPresentationStyle = .fullScreen
+//               self.present(nextViewController, animated:false, completion:nil)
+//            }
+            
+
+     //   }
     }
     
     @IBAction func viewCategory(_ sender: UIButton) {
-    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
-    nextViewController.modalPresentationStyle = .fullScreen
-    self.present(nextViewController, animated:false, completion:nil)
+//    let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+//    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "UpdateCategoryVC") as! UpdateCategoryVC
+//    nextViewController.modalPresentationStyle = .fullScreen
+//    self.present(nextViewController, animated:false, completion:nil)
 }
 @IBAction func changePassword(_ sender: UIButton) {
 
@@ -998,263 +995,8 @@ Alamofire.request("https://stumbal.com/process.php?action=update_profile_img", m
     }
 
 
- //MARK: tableView Methode
-   func numberOfSections(in tableView: UITableView) -> Int {
-       return 1
-   }
-   func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-       self.viewWillLayoutSubviews()
-   }
 
-
-
-   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-     return UITableView.automaticDimension
-   }
-   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      // return AppendArr.count
-    
-    if AppendArr.count == 0 {
-        if UserDefaults.standard.bool(forKey: "upcoming_event") == true
-        {
-            self.eventTblView.setEmptyMessage("No upcoming events")
-        
-        }
-        else
-        {
-            self.eventTblView.setEmptyMessage("No past events")
-        }
-        
-        
-    } else {
-        self.eventTblView.restore()
-    }
-
-    return AppendArr.count
-    
-   }
-   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = eventTblView.dequeueReusableCell(withIdentifier: "EventTblCell", for: indexPath) as! EventTblCell
-    
-    
-    
-    if UserDefaults.standard.bool(forKey: "upcoming_event") == true
-    {
-       // cell.profileImg.sd_setImage(with: URL(string: (self.AppendArr[indexPath.row] as AnyObject).value(forKey:"event_img") as! String), placeholderImage: UIImage(named: "edefault"))
-        
-        
-//            cell.eventImg?.sd_setImage(with: URL(string: (self.AppendArr[indexPath.row] as AnyObject).value(forKey:"event_img") as! String)) { (image, error, cache, urls) in
-//                        if (error != nil) {
-//                            cell.eventImg.image = UIImage(named: "edefault")
-//                        } else {
-//                            cell.eventImg.image = image
-//                        }
-//            }
-        
-//            let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
-//
-//            if eimg == ""
-//            {
-//               cell.eventImg.image = UIImage(named: "edefault")
-//
-//            }
-//               else
-//            {
-//               let url = URL(string: eimg)
-//               let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
-//                            |> RoundCornerImageProcessor(cornerRadius: 0)
-//               cell.eventImg.kf.indicatorType = .activity
-//               cell.eventImg.kf.setImage(
-//                   with: url,
-//                   placeholder: nil,
-//                   options: [
-//                       .processor(processor),
-//                       .scaleFactor(UIScreen.main.scale),
-//                       .transition(.fade(1)),
-//                       .cacheOriginalImage
-//                   ])
-//               {
-//                   result in
-//                   switch result {
-//                   case .success(let value):
-//                       print("Task done for: \(value.source.url?.absoluteString ?? "")")
-//                   case .failure(let error):
-//                       print("Job failed: \(error.localizedDescription)")
-//                    cell.eventImg.image = UIImage(named: "edefault")
-//                   }
-//               }
-//
-//            }
-        
-        
-        
-        
-        cell.eventNamelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
-        cell.eventAddressLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "address")as! String
-        
-        cell.vendorNameLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
-
-        cell.categorylbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_category")as! String
-        
-        let od = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_date")as! String
-        let cd = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_date")as! String
-        let ot = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_time")as! String
-        let ct = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_time")as! String
-     //   cell.eventTimelbl.text = od + " to " + cd + " timing " + ot + " to " + ct
-        
-    }
-    else
-    {
-       // cell.profileImg.sd_setImage(with: URL(string: (self.AppendArr[indexPath.row] as AnyObject).value(forKey:"event_img") as! String), placeholderImage: UIImage(named: "edefault"))
-        
-//            cell.eventImg?.sd_setImage(with: URL(string: (self.AppendArr[indexPath.row] as AnyObject).value(forKey:"event_img") as! String)) { (image, error, cache, urls) in
-//                        if (error != nil) {
-//                            cell.eventImg.image = UIImage(named: "edefault")
-//                        } else {
-//                            cell.eventImg.image = image
-//                        }
-//            }
-//
-//            let eimg:String = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img")as! String
-//
-//            if eimg == ""
-//            {
-//               cell.eventImg.image = UIImage(named: "edefault")
-//
-//            }
-//               else
-//            {
-//               let url = URL(string: eimg)
-//               let processor = DownsamplingImageProcessor(size: cell.eventImg.bounds.size)
-//                            |> RoundCornerImageProcessor(cornerRadius: 0)
-//               cell.eventImg.kf.indicatorType = .activity
-//               cell.eventImg.kf.setImage(
-//                   with: url,
-//                   placeholder: nil,
-//                   options: [
-//                       .processor(processor),
-//                       .scaleFactor(UIScreen.main.scale),
-//                       .transition(.fade(1)),
-//                       .cacheOriginalImage
-//                   ])
-//               {
-//                   result in
-//                   switch result {
-//                   case .success(let value):
-//                       print("Task done for: \(value.source.url?.absoluteString ?? "")")
-//                   case .failure(let error):
-//                       print("Job failed: \(error.localizedDescription)")
-//                    cell.eventImg.image = UIImage(named: "edefault")
-//                   }
-//               }
-//
-//            }
-//
-        
-        cell.eventNamelbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name")as! String
-        cell.eventAddressLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "address")as! String
-        
-        cell.vendorNameLbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
-
-        cell.categorylbl.text = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_category")as! String
-        
-        let od = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_date")as! String
-        let cd = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_date")as! String
-        let ot = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_time")as! String
-        let ct = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_time")as! String
-       // cell.eventTimelbl.text = od + " to " + cd + " timing " + ot + " to " + ct
-        
-    }
-    return cell
-   }
-
-
-
-
-func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
-    let pn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_name")as! String
-    let add = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "address")as! String
-    let od = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_date")as! String
-    let cd = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_date")as! String
-    let ot = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "open_time")as! String
-    let ct = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "close_time")as! String
-    let ai = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_img") as! String
-    let en = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_name") as! String
-    let aid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_id") as! String
-    let eid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_id") as! String
-    let tp = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "ticket_price") as! String
-    
-    let lat = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "lat") as! String
-    
-    let long = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "lng") as! String
-    
-    
-    
-    let scn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "sub_cat_name")as! String
-    
-    let n = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist")as! String
-    
-    let cn = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "category_name")as! String
-    
-    let ai1 = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_id")as! String
-    
-    let aimg = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_img")as! String
-    let ec = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_category")as! String
-    let pid = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "provider_id")as! String
-    
-    let spr = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "event_avg_rating")as! String
-    if spr == ""
-    {
-        providerRating = "0" + "/5"
-    }
-    else
-    {
-        providerRating = spr + "/5"
-    }
-    
-    let ar = (AppendArr.object(at: indexPath.row) as AnyObject).value(forKey: "artist_avg_rating")as! String
-    if ar == ""
-    {
-        artistRating = "0" + "/5"
-    }
-    else
-    {
-        artistRating = ar + "/5"
-    }
-    UserDefaults.standard.setValue(od, forKey: "e_opend")
-    UserDefaults.standard.setValue(ot, forKey: "e_opent")
-    UserDefaults.standard.setValue(cd, forKey: "e_closed")
-    UserDefaults.standard.setValue(ct, forKey: "e_closet")
-    
-    UserDefaults.standard.setValue(scn, forKey: "Event_subcat")
-    UserDefaults.standard.setValue(n, forKey: "Event_name")
-    UserDefaults.standard.setValue(cn, forKey: "Event_cat")
-    UserDefaults.standard.setValue(ai1, forKey: "Event_artid")
-    UserDefaults.standard.setValue(aimg, forKey: "Event_artimg")
-    UserDefaults.standard.setValue(providerRating, forKey: "Event_providerrating")
-    UserDefaults.standard.setValue(artistRating, forKey: "Event_artrating")
-    UserDefaults.standard.setValue(pid, forKey: "V_id")
-    
-    
-    
-    let f = od + " to " + cd + " timing " + ot + " to " + ct
-    UserDefaults.standard.setValue(pn, forKey: "e_providername")
-    UserDefaults.standard.setValue(add, forKey: "e_provideradd")
-    UserDefaults.standard.setValue(f, forKey: "e_time")
-    UserDefaults.standard.setValue(ai, forKey: "e_profile")
-    UserDefaults.standard.setValue(en, forKey: "e_name")
-    UserDefaults.standard.setValue(aid, forKey: "Event_artid")
-    UserDefaults.standard.setValue(eid, forKey: "Event_id")
-    UserDefaults.standard.setValue(tp, forKey: "Event_ticketprice")
-    UserDefaults.standard.setValue(lat, forKey: "Event_lat")
-    UserDefaults.standard.setValue(long, forKey: "Event_long")
-    UserDefaults.standard.setValue(ec, forKey: "Event_categoryname")
-    
-    var signuCon = self.storyboard?.instantiateViewController(withIdentifier: "EventDetailVC") as! EventDetailVC
-    signuCon.modalPresentationStyle = .fullScreen
-    self.present(signuCon, animated: false, completion:nil)
-}
+   
 
 //    func numberOfSections(in collectionView: UICollectionView) -> Int
 //    {
