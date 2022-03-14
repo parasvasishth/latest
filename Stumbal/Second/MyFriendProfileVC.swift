@@ -1429,6 +1429,8 @@ func fetch_block_unblock_user()
     
 }
 
+    var friendblock:String = ""
+    
 func block_unblock_user()
 {
     hud = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -1436,7 +1438,16 @@ func block_unblock_user()
     hud.self.bezelView.color = UIColor.black
     hud.label.text = "Loading...."
     
-    Alamofire.request("https://stumbal.com/process.php?action=block_unblock_user", method: .post, parameters: ["user_id":UserDefaults.standard.value(forKey: "u_Id") as! String,"block_user_id":UserDefaults.standard.value(forKey: "friend_rid") as! String,"status":blockStatus],encoding:  URLEncoding.httpBody).responseJSON{ response in
+    if blockStatus == "Accept"
+    {
+        friendblock = "Accept"
+    }
+    else
+    {
+        friendblock = ""
+    }
+    
+    Alamofire.request("https://stumbal.com/process.php?action=block_unblock_user", method: .post, parameters: ["user_id":UserDefaults.standard.value(forKey: "u_Id") as! String,"block_user_id":UserDefaults.standard.value(forKey: "friend_rid") as! String,"status":blockStatus,"ftype" : friendblock],encoding:  URLEncoding.httpBody).responseJSON{ response in
         if let data = response.data
         {
             let json = String(data: data, encoding: String.Encoding.utf8)

@@ -645,7 +645,7 @@ class EditUserProfileVC: UIViewController,UITextFieldDelegate,UIPickerViewDelega
                     {
                         
                         MBProgressHUD.hide(for: self.view, animated: true);
-                        let alert = UIAlertController(title: "", message: "You have successfully registered…", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "", message: "You have successfully updated.", preferredStyle: .alert)
                         self.present(alert, animated: true, completion: nil)
                         
                         // change to desired number of seconds (in this case 5 seconds)

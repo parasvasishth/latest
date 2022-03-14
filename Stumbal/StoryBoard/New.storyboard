@@ -232,7 +232,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3" y="54"/>
+            <point key="canvasLocation" x="-506" y="110"/>
         </scene>
         <!--SupportVC-->
         <scene sceneID="bwQ-QO-eUC">
@@ -411,7 +411,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jfr-Xu-1vj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="788" y="35"/>
+            <point key="canvasLocation" x="372" y="169"/>
         </scene>
         <!--New ContactVC-->
         <scene sceneID="dPq-Mj-6xR">
@@ -768,7 +768,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4bp-WM-qSU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="173.91304347826087" y="756.69642857142856"/>
+            <point key="canvasLocation" x="-174" y="808"/>
         </scene>
         <!--New Send ProposalVC-->
         <scene sceneID="cJt-bc-mKD">
@@ -1119,7 +1119,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SaR-Ns-sF5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1034.7826086956522" y="778.79464285714278"/>
+            <point key="canvasLocation" x="625" y="808"/>
         </scene>
         <!--New Change PasswordVC-->
         <scene sceneID="zfx-12-O06">
@@ -1645,7 +1645,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cAY-hU-LGk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1739" y="779"/>
+            <point key="canvasLocation" x="1336" y="808"/>
         </scene>
         <!--New Artist RatingVC-->
         <scene sceneID="Hke-4U-XfJ">
@@ -2819,7 +2819,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fY6-zM-1pH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2517.3913043478265" y="796.875"/>
+            <point key="canvasLocation" x="-2370" y="790"/>
         </scene>
         <!--New Venue Review ListVC-->
         <scene sceneID="09S-Xl-qhk">
@@ -3145,7 +3145,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rCH-4o-sm6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3362" y="826"/>
+            <point key="canvasLocation" x="-3155" y="790"/>
         </scene>
     </scenes>
     <resources>
