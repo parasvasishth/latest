@@ -587,13 +587,7 @@ class HomeVC: UIViewController,UISearchBarDelegate,CLLocationManagerDelegate,UIT
                                 self.loadingView.isHidden = true
                                 self.tabBarController?.tabBar.isHidden = false
                             }
-                            
-                            
-                            
-                            
-                            
-                            
-                            
+                           
                             self.loadingView.isHidden = true
                             MBProgressHUD.hide(for: self.view, animated: true)
                         }

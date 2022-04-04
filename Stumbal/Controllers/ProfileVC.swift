@@ -615,8 +615,6 @@ Alamofire.request("https://stumbal.com/process.php?action=update_profile_img", m
                 self.update_profile_image()
             }))
             self.present(alert, animated: false, completion: nil)
-            
-            
         }
         else
         {
